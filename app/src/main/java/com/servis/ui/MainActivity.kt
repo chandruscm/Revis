@@ -1,7 +1,8 @@
-package com.servis
+package com.servis.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.servis.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
