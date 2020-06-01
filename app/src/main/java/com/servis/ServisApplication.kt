@@ -1,7 +1,25 @@
 package com.servis
 
-import android.app.Application
+import com.servis.di.AppComponent
+import com.servis.di.DaggerAppComponent
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 
-class ServisApplication : Application() {
+@Suppress("unused")
+class ServisApplication : DaggerApplication() {
+
+    private lateinit var appComponent: AppComponent
+
+    fun getApplicationComponent() = appComponent
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return DaggerAppComponent.builder()
+            .application(this)
+            .build()
+            .also { appComponent ->
+                appComponent.inject(this)
+                this.appComponent = appComponent
+            }
+    }
 
 }
