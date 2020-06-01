@@ -33,6 +33,10 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
 
+    // Navigation Component
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_component_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_component_version"
+
     // Dagger
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation "com.google.dagger:dagger-android:$dagger_version"
