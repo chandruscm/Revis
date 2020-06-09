@@ -21,7 +21,6 @@ android {
 
         buildConfigField("String", "AGORA_APP_ID", apiProperties["AGORA_APP_ID"])
         buildConfigField("String", "AGORA_CERT", apiProperties["AGORA_CERT"])
-        buildConfigField("String", "AGORA_TOKEN", apiProperties["AGORA_TOKEN"])
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -66,4 +65,8 @@ dependencies {
 
     // Agora
     implementation "io.agora.rtc:full-sdk:$agora_version"
+
+    // Testing
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "androidx.test.ext:junit:$junit_android_version"
 }
