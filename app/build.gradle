@@ -3,6 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+// Load API PROPERTIES
+def apiPropertiesFile = rootProject.file("api.properties")
+def apiProperties = new Properties()
+apiProperties.load(new FileInputStream(apiPropertiesFile))
+
 android {
     compileSdkVersion 29
 
@@ -12,6 +17,10 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+
+        buildConfigField("String", "AGORA_APP_ID", apiProperties["AGORA_APP_ID"])
+        buildConfigField("String", "AGORA_CERT", apiProperties["AGORA_CERT"])
+        buildConfigField("String", "AGORA_TOKEN", apiProperties["AGORA_TOKEN"])
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -14,5 +14,10 @@
     <fragment
         android:id="@+id/videoCallFragment"
         android:name="com.servis.ui.video.VideoCallFragment"
-        android:label="VideoCallFragment" />
+        android:label="VideoCallFragment" >
+        <action
+            android:id="@+id/action_videoCallFragment_pop_including_contactsFragment"
+            app:popUpTo="@id/contactsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
