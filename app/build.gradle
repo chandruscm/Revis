@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 // Load API PROPERTIES
 def apiPropertiesFile = rootProject.file("api.properties")
@@ -23,6 +24,12 @@ android {
         buildConfigField("String", "AGORA_TOKEN", apiProperties["AGORA_TOKEN"])
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
     }
 
     dataBinding {

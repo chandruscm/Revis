@@ -5,13 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.servis.R
+import androidx.navigation.fragment.navArgs
 import com.servis.databinding.FragmentContactsBinding
 import com.servis.ui.shared.BaseFragment
+import com.servis.utils.show
 
 class ContactsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentContactsBinding
+
+    private val args: ContactsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,13 +28,29 @@ class ContactsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        verifyUrlParameters()
         initListeners()
+    }
+
+    /**
+     * Check if token and channel properties are available.
+     * TODO: Use telephone service to initiate video call.
+     */
+    private fun verifyUrlParameters() {
+        if (!args.token.isEmpty() && !args.channel.isEmpty()) {
+            binding.buttonStartCall.show()
+        }
     }
 
     private fun initListeners() {
         binding.buttonStartCall.setOnClickListener {
             findNavController()
-                .navigate(R.id.action_contactsFragment_to_videoCallFragment)
+                .navigate(ContactsFragmentDirections
+                    .actionContactsFragmentToVideoCallFragment(
+                        args.token,
+                        args.channel
+                    )
+                )
         }
     }
 }

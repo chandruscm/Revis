@@ -1,9 +1,11 @@
 package com.servis.ui
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
+import androidx.navigation.Navigation.findNavController
 import com.servis.R
 import com.servis.ui.shared.BaseActivity
 
@@ -37,5 +39,14 @@ class MainActivity : BaseActivity() {
                 //Todo: Handle userflow if permissions are denied.
             }
         }
+    }
+
+    /**
+     * Handle deep links through video call Urls.
+     */
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        findNavController(this, R.id.nav_host_fragment)
+            .handleDeepLink(intent)
     }
 }

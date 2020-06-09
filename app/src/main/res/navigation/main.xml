@@ -10,14 +10,29 @@
         <action
             android:id="@+id/action_contactsFragment_to_videoCallFragment"
             app:destination="@id/videoCallFragment" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://servis.com/?token={token}&amp;channel={channel}"/>
+        <argument
+            android:name="token"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="channel"
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
     <fragment
         android:id="@+id/videoCallFragment"
         android:name="com.servis.ui.video.VideoCallFragment"
-        android:label="VideoCallFragment" >
-        <action
-            android:id="@+id/action_videoCallFragment_pop_including_contactsFragment"
-            app:popUpTo="@id/contactsFragment"
-            app:popUpToInclusive="true" />
+        android:label="VideoCallFragment">
+        <argument
+            android:name="token"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="channel"
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
 </navigation>

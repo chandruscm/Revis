@@ -1,11 +1,12 @@
 package com.servis.ui.video
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.servis.BuildConfig
+import androidx.navigation.fragment.navArgs
 import com.servis.agora.BaseRtcEngine
 import com.servis.databinding.FragmentVideoCallBinding
 import com.servis.ui.shared.BaseFragment
@@ -17,6 +18,8 @@ import javax.inject.Inject
 class VideoCallFragment : BaseFragment() {
 
     private lateinit var binding: FragmentVideoCallBinding
+
+    private val args: VideoCallFragmentArgs by navArgs()
 
     @Inject
     lateinit var rtcEngineFactory : BaseRtcEngine.Factory
@@ -54,7 +57,8 @@ class VideoCallFragment : BaseFragment() {
 
     private fun initListeners() {
         binding.buttonEndCall.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController()
+                .popBackStack()
         }
     }
 
@@ -78,16 +82,16 @@ class VideoCallFragment : BaseFragment() {
         rtcEngine?.setupLocalVideo(VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FIT, 0))
     }
 
+    /**
+     * Parse token and channel from the URL.
+     * The token has to be URL encoded to parse + characters.
+     */
     private fun joinChannel() {
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
         // 2. One token is only valid for the channel name that
         // you use to generate this token.
-        var token: String? = BuildConfig.AGORA_TOKEN
-        if (token!!.isEmpty()) {
-            token = null
-        }
-        rtcEngine?.joinChannel(token, "remberg", "Extra Optional Data", 0) // if you do not specify the uid, we will generate the uid for you
+        rtcEngine?.joinChannel(args.token, args.channel, "Extra Optional Data", 0) // if you do not specify the uid, we will generate the uid for you
     }
 
     private fun leaveChannel() {
