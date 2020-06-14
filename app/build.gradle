@@ -65,6 +65,7 @@ dependencies {
 
     // Agora
     implementation "io.agora.rtc:full-sdk:$agora_version"
+    implementation "io.agora.rtm:rtm-sdk:$rtm_version"
 
     // Testing
     testImplementation "junit:junit:$junit_version"
