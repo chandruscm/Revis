@@ -38,11 +38,21 @@ class ContactsFragment : BaseFragment() {
      */
     private fun verifyUrlParameters() {
         if (!args.token.isEmpty() && !args.channel.isEmpty()) {
+            binding.buttonStartChat.show()
             binding.buttonStartCall.show()
         }
     }
 
     private fun initListeners() {
+        binding.buttonStartChat.setOnClickListener {
+            findNavController()
+                .navigate(ContactsFragmentDirections
+                    .actionContactsFragmentToMessageFragment(
+                        args.channel
+                    )
+                )
+        }
+
         binding.buttonStartCall.setOnClickListener {
             findNavController()
                 .navigate(ContactsFragmentDirections

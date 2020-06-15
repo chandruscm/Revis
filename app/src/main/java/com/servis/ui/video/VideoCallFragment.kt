@@ -49,10 +49,14 @@ class VideoCallFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initListeners()
         initAgora()
+        initListeners()
         setupLocalVideo()
         joinChannel()
+    }
+
+    private fun initAgora() {
+        rtcEngine = rtcEngineFactory.create(rtcEventHandler)
     }
 
     private fun initListeners() {
@@ -60,10 +64,6 @@ class VideoCallFragment : BaseFragment() {
             findNavController()
                 .popBackStack()
         }
-    }
-
-    private fun initAgora() {
-        rtcEngine = rtcEngineFactory.create(rtcEventHandler)
     }
 
     private fun setupLocalVideo() {
@@ -91,7 +91,7 @@ class VideoCallFragment : BaseFragment() {
         // same channel successfully using the same app id.
         // 2. One token is only valid for the channel name that
         // you use to generate this token.
-        rtcEngine?.joinChannel(args.token, args.channel, "Extra Optional Data", 0) // if you do not specify the uid, we will generate the uid for you
+        rtcEngine?.joinChannel(null, args.channel, "Extra Optional Data", 0) // if you do not specify the uid, we will generate the uid for you
     }
 
     private fun leaveChannel() {

@@ -21,6 +21,9 @@
             android:name="channel"
             app:argType="string"
             android:defaultValue=""/>
+        <action
+            android:id="@+id/action_contactsFragment_to_messageFragment"
+            app:destination="@id/messageFragment" />
     </fragment>
     <fragment
         android:id="@+id/videoCallFragment"
@@ -30,6 +33,15 @@
             android:name="token"
             app:argType="string"
             android:defaultValue=""/>
+        <argument
+            android:name="channel"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
+    <fragment
+        android:id="@+id/messageFragment"
+        android:name="com.servis.ui.message.MessageFragment"
+        android:label="MessageFragment">
         <argument
             android:name="channel"
             app:argType="string"
