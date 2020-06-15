@@ -28,7 +28,6 @@ abstract class BaseRtcEngine : RtcEngine() {
                     setVideoEncoderConfiguration(configuration)
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
                 throw RuntimeException(
                     "NEED TO check rtc sdk init fatal error\n" +
                             Log.getStackTraceString(e)
