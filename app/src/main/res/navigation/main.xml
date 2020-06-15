@@ -12,11 +12,7 @@
             app:destination="@id/videoCallFragment" />
         <deepLink
             android:id="@+id/deepLink"
-            app:uri="https://servis.com/?token={token}&amp;channel={channel}"/>
-        <argument
-            android:name="token"
-            app:argType="string"
-            android:defaultValue=""/>
+            app:uri="https://servis.com/?channel={channel}"/>
         <argument
             android:name="channel"
             app:argType="string"
@@ -29,10 +25,6 @@
         android:id="@+id/videoCallFragment"
         android:name="com.servis.ui.video.VideoCallFragment"
         android:label="VideoCallFragment">
-        <argument
-            android:name="token"
-            app:argType="string"
-            android:defaultValue=""/>
         <argument
             android:name="channel"
             app:argType="string"

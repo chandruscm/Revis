@@ -83,14 +83,12 @@ class VideoCallFragment : BaseFragment() {
     }
 
     /**
-     * Parse token and channel from the URL.
-     * The token has to be URL encoded to parse + characters.
+     * Parse channel from the URL.
+     * Token is not used.
      */
     private fun joinChannel() {
-        // 1. Users can only see each other after they join the
+        // Users can only see each other after they join the
         // same channel successfully using the same app id.
-        // 2. One token is only valid for the channel name that
-        // you use to generate this token.
         rtcEngine?.joinChannel(null, args.channel, "Extra Optional Data", 0) // if you do not specify the uid, we will generate the uid for you
     }
 

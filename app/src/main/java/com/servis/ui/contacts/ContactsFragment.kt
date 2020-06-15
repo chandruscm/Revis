@@ -37,7 +37,7 @@ class ContactsFragment : BaseFragment() {
      * TODO: Use telephone service to initiate video call.
      */
     private fun verifyUrlParameters() {
-        if (!args.token.isEmpty() && !args.channel.isEmpty()) {
+        if (!args.channel.isEmpty()) {
             binding.buttonStartChat.show()
             binding.buttonStartCall.show()
         }
@@ -57,7 +57,6 @@ class ContactsFragment : BaseFragment() {
             findNavController()
                 .navigate(ContactsFragmentDirections
                     .actionContactsFragmentToVideoCallFragment(
-                        args.token,
                         args.channel
                     )
                 )
