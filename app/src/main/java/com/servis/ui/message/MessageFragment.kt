@@ -1,6 +1,7 @@
 package com.servis.ui.message
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,12 +35,7 @@ class MessageFragment : BaseFragment() {
     @Inject
     lateinit var sendMessageOptions: SendMessageOptions
 
-    private val rtmClientListener = object : BaseRtmClientListener() {
-
-        override fun onConnectionStateChanged(state: Int, reason: Int) {
-            requireActivity().runOnUiThread { verifyConnection(state, reason) }
-        }
-    }
+    private val rtmClientListener = object : BaseRtmClientListener() { }
 
     private val rtmChannelListener = object : BaseRtmChannelListener() {
 
