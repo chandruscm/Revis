@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Servis</string>
+    <string name="app_name">Revis</string>
 
     <!-- Chat Fragment -->
     <string name="chat_input_hint">Type a message</string>

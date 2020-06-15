@@ -13,7 +13,7 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        applicationId "com.servis"
+        applicationId "com.revis"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1

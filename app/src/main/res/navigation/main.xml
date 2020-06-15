@@ -5,14 +5,14 @@
 
     <fragment
         android:id="@+id/contactsFragment"
-        android:name="com.servis.ui.contacts.ContactsFragment"
+        android:name="com.revis.ui.contacts.ContactsFragment"
         android:label="ContactsFragment" >
         <action
             android:id="@+id/action_contactsFragment_to_videoCallFragment"
             app:destination="@id/videoCallFragment" />
         <deepLink
             android:id="@+id/deepLink"
-            app:uri="https://servis.com/?channel={channel}"/>
+            app:uri="https://revis.com/?channel={channel}"/>
         <argument
             android:name="channel"
             app:argType="string"
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/videoCallFragment"
-        android:name="com.servis.ui.video.VideoCallFragment"
+        android:name="com.revis.ui.video.VideoCallFragment"
         android:label="VideoCallFragment">
         <argument
             android:name="channel"
@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/messageFragment"
-        android:name="com.servis.ui.message.MessageFragment"
+        android:name="com.revis.ui.message.MessageFragment"
         android:label="MessageFragment">
         <argument
             android:name="channel"
