@@ -2,6 +2,7 @@ package com.servis.di.module
 
 import android.app.Application
 import android.content.Context
+import com.servis.BuildConfig
 import com.servis.ServisApplication
 import com.servis.di.scope.ApplicationScope
 import dagger.Module
@@ -25,4 +26,8 @@ class AppModule {
     internal fun provideContext(application: Application): Context {
         return application
     }
+
+    @Provides
+    @ApplicationScope
+    fun provideAppId() = BuildConfig.AGORA_APP_ID
 }

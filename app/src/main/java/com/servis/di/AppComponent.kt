@@ -4,6 +4,7 @@ import android.app.Application
 import com.servis.ServisApplication
 import com.servis.di.builder.ActivityBuilder
 import com.servis.di.module.AppModule
+import com.servis.di.module.MessageModule
 import com.servis.di.module.VideoCallModule
 import com.servis.di.scope.ApplicationScope
 import dagger.BindsInstance
@@ -19,7 +20,8 @@ import dagger.android.support.AndroidSupportInjectionModule
         AndroidSupportInjectionModule::class,
         ViewModelBuilder::class,
         AppModule::class,
-        VideoCallModule::class
+        VideoCallModule::class,
+        MessageModule::class
     ]
 )
 interface AppComponent : AndroidInjector<DaggerApplication> {

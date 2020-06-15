@@ -17,10 +17,6 @@ class VideoCallModule {
 
     @Provides
     @ApplicationScope
-    fun provideAppId() = BuildConfig.AGORA_APP_ID
-
-    @Provides
-    @ApplicationScope
     fun provideVideoEncoderConfiguration() = VideoEncoderConfiguration(
         VideoEncoderConfiguration.VD_960x720,
         VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15,
