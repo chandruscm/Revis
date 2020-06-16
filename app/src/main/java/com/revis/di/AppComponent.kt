@@ -3,6 +3,7 @@ package com.revis.di
 import android.app.Application
 import com.revis.RevisApplication
 import com.revis.di.builder.ActivityBuilder
+import com.revis.di.builder.FragmentBuilder
 import com.revis.di.module.AppModule
 import com.revis.di.module.MessageModule
 import com.revis.di.module.VideoCallModule
@@ -17,6 +18,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 @Component(
     modules = [
         ActivityBuilder::class,
+        FragmentBuilder::class,
         AndroidSupportInjectionModule::class,
         ViewModelBuilder::class,
         AppModule::class,
