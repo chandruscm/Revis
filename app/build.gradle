@@ -67,6 +67,9 @@ dependencies {
     implementation "io.agora.rtc:full-sdk:$agora_version"
     implementation "io.agora.rtm:rtm-sdk:$rtm_version"
 
+    // Gson
+    implementation "com.google.code.gson:gson:$gson_version"
+
     // Testing
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_android_version"
