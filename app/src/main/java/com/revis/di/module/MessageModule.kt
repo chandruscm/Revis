@@ -1,6 +1,7 @@
 package com.revis.di.module
 
 import android.content.Context
+import com.google.gson.Gson
 import com.revis.agora.BaseRtmClient
 import com.revis.di.scope.ApplicationScope
 import dagger.Module
@@ -26,4 +27,8 @@ class MessageModule {
     fun provideSendMessageOptions() = SendMessageOptions().apply {
         enableOfflineMessaging = true
     }
+
+    @Provides
+    @ApplicationScope
+    fun provideGson() = Gson()
 }

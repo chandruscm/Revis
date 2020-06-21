@@ -16,7 +16,6 @@ import io.agora.rtm.ResultCallback
 import io.agora.rtm.RtmChannel
 import io.agora.rtm.RtmChannelMember
 import io.agora.rtm.RtmClient
-import io.agora.rtm.RtmMessage
 import io.agora.rtm.RtmStatusCode
 import io.agora.rtm.SendMessageOptions
 import java.util.UUID
@@ -29,6 +28,9 @@ class MessageFragment : BaseFragment() {
     private val args: MessageFragmentArgs by navArgs()
 
     @Inject
+    lateinit var viewModel: MessageViewModel
+
+    @Inject
     lateinit var rtmClientFactory: BaseRtmClient.Factory
 
     @Inject
@@ -38,8 +40,19 @@ class MessageFragment : BaseFragment() {
 
     private val rtmChannelListener = object : BaseRtmChannelListener() {
 
-        override fun onMessageReceived(message: RtmMessage, member: RtmChannelMember) {
-            requireActivity().runOnUiThread { updateMessages(message.text, member, false) }
+        override fun onTextMessageReceived(text: String, member: RtmChannelMember) {
+            requireActivity().runOnUiThread {
+                updateMessages(text, member, false)
+            }
+        }
+
+        override fun onPointerMessageReceived(x: Int, y: Int) {
+        }
+
+        override fun onArrowMessageReceived(step: String, x: Int, y: Int) {
+        }
+
+        override fun onClearMessageReceived() {
         }
     }
 
@@ -59,7 +72,6 @@ class MessageFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         initAgora()
         initListeners()
     }
@@ -68,7 +80,7 @@ class MessageFragment : BaseFragment() {
         rtmClient = rtmClientFactory.create(rtmClientListener)
         val randomUUID = UUID.randomUUID().toString().substring(0,6)
         rtmClient?.login(null, randomUUID, object : ResultCallback<Void?> {
-            
+
             override fun onSuccess(responseInfo: Void?) {
                 joinChannel()
             }
@@ -85,7 +97,9 @@ class MessageFragment : BaseFragment() {
         binding.buttonSendMessage.setOnClickListener {
             binding.messageInput.text.toString().let { message ->
                 if (!message.isEmpty()) {
-                    sendMessage(message)
+                    sendMessage(viewModel.createTextMessage(message))
+                    updateMessages(message, isSelf = true)
+                    clearMessageInput()
                 }
             }
         }
@@ -119,13 +133,6 @@ class MessageFragment : BaseFragment() {
         }
     }
 
-    private fun verifyConnection(state: Int, reason: Int) {
-        when (state) {
-            RtmStatusCode.ConnectionState.CONNECTION_STATE_RECONNECTING -> showToast("Reconnecting")
-            RtmStatusCode.ConnectionState.CONNECTION_STATE_ABORTED -> showToast("Connection Lost")
-        }
-    }
-
     private fun updateMessages(message: String, member: RtmChannelMember? = null, isSelf: Boolean = false) {
         binding.messages.append("\n ${if (isSelf) "You" else member?.userId}: $message")
     }
@@ -136,12 +143,10 @@ class MessageFragment : BaseFragment() {
         rtmChannel?.sendMessage(rtmClient?.createMessage(message), sendMessageOptions,
             object : ResultCallback<Void?> {
 
-                override fun onSuccess(responseInfo: Void?) {
-                    requireActivity().runOnUiThread {
-                        updateMessages(message, isSelf = true)
-                        clearMessageInput()
-                    }
-                }
+                /**
+                 * Success callback can be used to create delivered tick like WhatsApp.
+                 */
+                override fun onSuccess(responseInfo: Void?) { }
 
                 override fun onFailure(errorInfo: ErrorInfo) {
                     requireActivity().runOnUiThread {
