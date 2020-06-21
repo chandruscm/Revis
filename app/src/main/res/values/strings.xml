@@ -1,7 +1,12 @@
 <resources>
-    <string name="app_name">Revis</string>
+    <string name="app_name">revis</string>
 
     <!-- Chat Fragment -->
     <string name="chat_input_hint">Type a message</string>
     <string name="button_send">Send</string>
+
+    <!-- Home Fragment -->
+    <string name="tab_all_technicians">All technicians</string>
+    <string name="tab_call_logs">Call logs</string>
+    <string name="start_call_operator">Request Service</string>
 </resources>

@@ -7,14 +7,14 @@ import androidx.fragment.app.Fragment
 /**
  * Setting a view's visibility to gone
  */
-fun View.hide() {
+fun View.makeGone() {
     visibility = View.GONE
 }
 
 /**
  * Setting a view's visibility to visible
  */
-fun View.show() {
+fun View.makeVisible() {
     visibility = View.VISIBLE
 }
 

@@ -11,4 +11,24 @@
 
     <style name="AppTheme" parent="BaseTheme"/>
 
+    <style name="AppBarTitleText">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/font_extra_large</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TabLayoutTextAppearance" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="tabTextColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/font_medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ExtendedFloatingButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="android:textColor">@color/whiteDirty</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="backgroundTint">@color/colorAccent</item>
+        <item name="rippleColor">@color/colorAccentLight</item>
+    </style>
+
 </resources>

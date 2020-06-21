@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/contactsFragment"
-        android:name="com.revis.ui.contacts.ContactsFragment"
+        android:name="com.revis.ui.home.HomeFragment"
         android:label="ContactsFragment" >
         <action
             android:id="@+id/action_contactsFragment_to_videoCallFragment"
