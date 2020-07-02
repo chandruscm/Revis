@@ -3,8 +3,10 @@ package com.revis.ui.video
 import android.os.Bundle
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.doOnPreDraw
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.revis.R
 import com.revis.agora.BaseRtmChannelListener
 import com.revis.agora.BaseRtmClient
 import com.revis.agora.BaseRtmClientListener
@@ -63,10 +65,11 @@ class VideoCallActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityVideoCallBinding.inflate(layoutInflater)
+        binding = DataBindingUtil.setContentView(
+            this, R.layout.activity_video_call
+        )
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-        setContentView(binding.root)
 
         initAgora()
         initBottomSheet()

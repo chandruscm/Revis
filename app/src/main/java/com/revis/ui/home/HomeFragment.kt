@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.revis.R
@@ -13,13 +11,10 @@ import com.revis.databinding.FragmentHomeBinding
 import com.revis.ui.contacts.AllContactsFragment
 import com.revis.ui.contacts.CallLogsFragment
 import com.revis.ui.shared.BaseFragment
-import com.revis.utils.makeVisible
 
 class HomeFragment : BaseFragment() {
 
     private lateinit var binding: FragmentHomeBinding
-
-    private val args: HomeFragmentArgs by navArgs()
 
     private val adapter by lazy {
         HomeTabAdapter()
@@ -44,28 +39,12 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        verifyUrlParameters()
         initListeners()
-    }
-
-    /**
-     * Check if token and channel properties are available.
-     * TODO: Use telephone service to initiate video call.
-     */
-    private fun verifyUrlParameters() {
-        if (!args.channel.isEmpty()) {
-            binding.buttonStartCall.makeVisible()
-        }
     }
 
     private fun initListeners() {
         binding.buttonStartCall.setOnClickListener {
-            findNavController()
-                .navigate(HomeFragmentDirections
-                    .actionHomeFragmentToVideoCallActivity(
-                        args.channel
-                    )
-                )
+
         }
     }
 

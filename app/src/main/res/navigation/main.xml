@@ -4,15 +4,6 @@
     app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/messageFragment"
-        android:name="com.revis.ui.message.MessageFragment"
-        android:label="MessageFragment">
-        <argument
-            android:name="channel"
-            app:argType="string"
-            android:defaultValue=""/>
-    </fragment>
-    <fragment
         android:id="@+id/videoCallFragment"
         android:name="com.revis.ui.video.VideoCallFragment"
         android:label="VideoCallFragment">
@@ -34,13 +25,6 @@
         android:id="@+id/homeFragment"
         android:name="com.revis.ui.home.HomeFragment"
         android:label="HomeFragment" >
-        <deepLink
-            android:id="@+id/deepLink"
-            app:uri="https://revis.com/?channel={channel}"/>
-        <argument
-            android:name="channel"
-            app:argType="string"
-            android:defaultValue=""/>
         <action
             android:id="@+id/action_homeFragment_to_videoCallActivity"
             app:destination="@id/videoCallActivity" />

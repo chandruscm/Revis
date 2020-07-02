@@ -40,13 +40,4 @@ class MainActivity : BaseActivity() {
             }
         }
     }
-
-    /**
-     * Handle deep links through video call Urls.
-     */
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        findNavController(this, R.id.nav_host_fragment)
-            .handleDeepLink(intent)
-    }
 }

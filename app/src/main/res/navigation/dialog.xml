@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/dialog"
+    app:startDestination="@id/deepLinkDialogPromptFragment">
+
+    <fragment
+        android:id="@+id/videoCallFragment"
+        android:name="com.revis.ui.video.VideoCallFragment"
+        android:label="VideoCallFragment">
+        <argument
+            android:name="channel"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
+    <fragment
+        android:id="@+id/deepLinkDialogPromptFragment"
+        android:name="com.revis.ui.dialog.DeepLinkDialogPromptFragment"
+        android:label="DeepLinkDialogPromptFragment" >
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://revis.com/?channel={channel}"/>
+        <argument
+            android:name="channel"
+            app:argType="string"
+            android:defaultValue=""/>
+        <action
+            android:id="@+id/action_deepLinkDialogPromptFragment_to_videoCallActivity2"
+            app:destination="@id/videoCallActivity2" />
+    </fragment>
+    <activity
+        android:id="@+id/videoCallActivity2"
+        android:name="com.revis.ui.video.VideoCallActivity"
+        android:label="VideoCallActivity">
+        <argument
+            android:name="channel"
+            app:argType="string"
+            android:defaultValue=""/>
+    </activity>
+</navigation>

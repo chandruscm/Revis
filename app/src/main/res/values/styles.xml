@@ -12,10 +12,24 @@
 
     <style name="AppTheme" parent="BaseTheme"/>
 
+    <style name="DeepLinkDialogTheme" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/deep_link_dialog_prompt_background</item>
+        <item name="android:colorControlHighlight">@color/colorAccentLight</item>
+        <item name="android:fontFamily">@font/red_hat</item>
+    </style>
+
     <style name="AppBarTitleText">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">@dimen/font_extra_large</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AppBarTitleText.Light">
+        <item name="android:textColor">@color/whiteDirty</item>
     </style>
 
     <style name="PrimaryText">
@@ -47,7 +61,6 @@
 
     <style name="ExtendedFloatingButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
         <item name="android:textColor">@color/whiteDirty</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">false</item>
         <item name="backgroundTint">@color/colorPrimary</item>
         <item name="iconTint">@color/whiteDirty</item>
@@ -61,6 +74,28 @@
     <style name="CircleButtonActive" parent="Widget.AppCompat.ImageButton">
         <item name="android:background">@drawable/circle_button_active_select</item>
         <item name="tint">@color/icon_tint_active_select</item>
+    </style>
+
+    <style name="SolidButtonStyle" parent="@style/Widget.MaterialComponents.Button">
+        <item name="android:textSize">@dimen/font_small</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="SolidButtonStyle.Accent">
+        <item name="android:backgroundTint">@color/colorAccent</item>
+    </style>
+
+    <style name="SolidButtonStyle.Primary">
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="TextButtonStyle" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="rippleColor">@color/colorAccentLight</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="android:textSize">@dimen/font_small</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
 </resources>

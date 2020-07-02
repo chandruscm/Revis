@@ -29,8 +29,14 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
 
-            <nav-graph android:value="@navigation/main" />
+        <activity
+            android:name=".ui.dialog.DeepLinkDialogPromptActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/DeepLinkDialogTheme">
+
+            <nav-graph android:value="@navigation/dialog" />
         </activity>
 
         <activity
