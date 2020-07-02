@@ -39,11 +39,5 @@ object ContactsBindingAdapters {
             text = statusText
         }
     }
-
-    @BindingAdapter("setImageResource")
-    @JvmStatic
-    fun bindSetImageResource(imageView: ImageView, @DrawableRes drawable: Int) {
-        imageView.setImageResource(drawable)
-    }
 }
 
