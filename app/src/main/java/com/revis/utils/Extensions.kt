@@ -1,8 +1,13 @@
 package com.revis.utils
 
+import android.content.Context
+import android.util.DisplayMetrics
 import android.view.View
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 /**
  * Setting a view's visibility to gone
@@ -23,4 +28,50 @@ fun View.makeVisible() {
  */
 fun Fragment.showToast(message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
+
+/**
+ * Show a toast message from an Activity
+ */
+fun Context.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+/**
+ * Flip a boolean in a MutableLiveData
+ */
+fun MutableLiveData<Boolean>.flipBoolean() {
+    this.value?.let { previousValue ->
+        this.value = !previousValue
+    }
+}
+
+/**
+ * Expand a BottomSheet
+ */
+fun BottomSheetBehavior<ConstraintLayout>.expand() {
+    this.state = BottomSheetBehavior.STATE_EXPANDED
+}
+
+/**
+ * Check if BottomSheet is expanded
+ */
+fun BottomSheetBehavior<ConstraintLayout>.isExpanded(): Boolean {
+    return this.state == BottomSheetBehavior.STATE_EXPANDED
+}
+
+/**
+ * Collapse a BottomSheet
+ */
+fun BottomSheetBehavior<ConstraintLayout>.collapse() {
+    this.state = BottomSheetBehavior.STATE_COLLAPSED
+}
+
+/**
+ * Get screen width and height
+ */
+fun Fragment.displayMetrics(): DisplayMetrics {
+    val displayMetrics = DisplayMetrics()
+    requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+    return displayMetrics
 }

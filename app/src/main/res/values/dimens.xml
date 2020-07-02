@@ -11,4 +11,7 @@
     <dimen name="font_large">18sp</dimen>
     <dimen name="font_extra_large">20sp</dimen>
 
+    <dimen name="bottom_sheet_corner_radius">16dp</dimen>
+    <dimen name="bottom_sheet_peek_height">360dp</dimen>
+
 </resources>

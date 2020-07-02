@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.revis.ui.video.VideoCallViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_bottom_sheet"
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:elevation="4dp"
+        >
+
+        <ImageButton
+            android:id="@+id/button_switch_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            app:layout_constraintBottom_toTopOf="@id/separator"
+            app:layout_constraintEnd_toStartOf="@+id/button_mic_off"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_switch_camera"
+            app:isSelected="@{viewModel.cameraState}"
+            android:onClick="@{() -> viewModel.toggleCamera()}"
+            style="@style/CircleButtonActive"
+            />
+
+        <ImageButton
+            android:id="@+id/button_mic_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/button_switch_camera"
+            app:layout_constraintEnd_toStartOf="@+id/button_video_off"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_switch_camera"
+            app:layout_constraintTop_toTopOf="@+id/button_switch_camera"
+            app:srcCompat="@drawable/ic_mic_off"
+            app:isSelected="@{viewModel.micState}"
+            android:onClick="@{() -> viewModel.toggleMic()}"
+            style="@style/CircleButton"
+            />
+
+        <ImageButton
+            android:id="@+id/button_video_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/button_mic_off"
+            app:layout_constraintEnd_toStartOf="@+id/button_messages"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_mic_off"
+            app:layout_constraintTop_toTopOf="@+id/button_mic_off"
+            app:srcCompat="@drawable/ic_video_off"
+            app:isSelected="@{viewModel.videoState}"
+            android:onClick="@{() -> viewModel.toggleVideo()}"
+            style="@style/CircleButton"
+            />
+
+        <ImageButton
+            android:id="@+id/button_messages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/button_video_off"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_video_off"
+            app:layout_constraintTop_toTopOf="@+id/button_video_off"
+            app:srcCompat="@drawable/ic_messages"
+            app:isSelected="@{viewModel.messagesState}"
+            android:onClick="@{() -> viewModel.toggleMessages()}"
+            style="@style/CircleButton"
+            />
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:background="@color/greyLight"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_switch_camera"
+            />
+
+        <TextView
+            android:id="@+id/messages"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:text="Messages will appear here"
+            android:textSize="24dp"
+            app:layout_constraintBottom_toTopOf="@+id/message_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator"
+            />
+
+        <EditText
+            android:id="@+id/message_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/chat_input_hint"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_send_message"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="Autofill"
+            />
+
+        <Button
+            android:id="@+id/button_send_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_send"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/message_input"
+            app:layout_constraintBottom_toBottomOf="@id/message_input"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

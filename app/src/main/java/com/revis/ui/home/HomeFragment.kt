@@ -64,7 +64,7 @@ class HomeFragment : BaseFragment() {
         binding.buttonStartCall.setOnClickListener {
             findNavController()
                 .navigate(HomeFragmentDirections
-                    .actionContactsFragmentToVideoCallFragment(
+                    .actionHomeFragmentToVideoCallActivity(
                         args.channel
                     )
                 )

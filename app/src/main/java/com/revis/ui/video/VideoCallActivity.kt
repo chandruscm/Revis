@@ -1,34 +1,35 @@
-package com.revis.ui.message
+package com.revis.ui.video
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.navigation.fragment.navArgs
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.doOnPreDraw
+import androidx.lifecycle.Observer
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.revis.agora.BaseRtmChannelListener
 import com.revis.agora.BaseRtmClient
 import com.revis.agora.BaseRtmClientListener
-import com.revis.databinding.FragmentMessageBinding
-import com.revis.ui.shared.BaseFragment
-import com.revis.utils.showToast
-import io.agora.rtm.ErrorInfo
-import io.agora.rtm.ResultCallback
-import io.agora.rtm.RtmChannel
-import io.agora.rtm.RtmChannelMember
-import io.agora.rtm.RtmClient
-import io.agora.rtm.RtmStatusCode
+import com.revis.databinding.ActivityVideoCallBinding
+import com.revis.ui.message.Position
+import com.revis.ui.shared.BaseActivity
+import com.revis.utils.*
 import io.agora.rtm.SendMessageOptions
+import io.agora.rtm.RtmChannelMember
+import io.agora.rtm.RtmChannel
+import io.agora.rtm.RtmClient
+import io.agora.rtm.ResultCallback
+import io.agora.rtm.ErrorInfo
+import io.agora.rtm.RtmStatusCode
 import java.util.UUID
 import javax.inject.Inject
 
-class MessageFragment : BaseFragment() {
+class VideoCallActivity : BaseActivity() {
 
-    private lateinit var binding: FragmentMessageBinding
+    private lateinit var binding: ActivityVideoCallBinding
 
-    private val args: MessageFragmentArgs by navArgs()
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
     @Inject
-    lateinit var viewModel: MessageViewModel
+    lateinit var viewModel: VideoCallViewModel
 
     @Inject
     lateinit var rtmClientFactory: BaseRtmClient.Factory
@@ -41,15 +42,15 @@ class MessageFragment : BaseFragment() {
     private val rtmChannelListener = object : BaseRtmChannelListener() {
 
         override fun onTextMessageReceived(text: String, member: RtmChannelMember) {
-            requireActivity().runOnUiThread {
+            runOnUiThread {
                 updateMessages(text, member, false)
             }
         }
 
-        override fun onPointerMessageReceived(x: Int, y: Int) {
-        }
-
-        override fun onArrowMessageReceived(step: String, x: Int, y: Int) {
+        override fun onPointerMessageReceived(position: Position) {
+            runOnUiThread {
+                viewModel.movePointer(position)
+            }
         }
 
         override fun onClearMessageReceived() {
@@ -60,20 +61,17 @@ class MessageFragment : BaseFragment() {
 
     private var rtmChannel: RtmChannel? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMessageBinding.inflate(layoutInflater)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityVideoCallBinding.inflate(layoutInflater)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+        setContentView(binding.root)
 
         initAgora()
+        initBottomSheet()
         initListeners()
+        subscribeAnnotation()
     }
 
     private fun initAgora() {
@@ -86,16 +84,25 @@ class MessageFragment : BaseFragment() {
             }
 
             override fun onFailure(errorInfo: ErrorInfo) {
-                requireActivity().runOnUiThread {
+                runOnUiThread {
                     showToast("Login failed")
                 }
             }
         })
     }
 
+    private fun initBottomSheet() {
+        binding.bottomSheet.separator.doOnPreDraw { view ->
+            bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.root as ConstraintLayout)
+            bottomSheetBehavior.peekHeight = view.top
+            bottomSheetBehavior.isDraggable = false
+            subscribeMessagesButton()
+        }
+    }
+
     private fun initListeners() {
-        binding.buttonSendMessage.setOnClickListener {
-            binding.messageInput.text.toString().let { message ->
+        binding.bottomSheet.buttonSendMessage.setOnClickListener {
+            binding.bottomSheet.messageInput.text.toString().let { message ->
                 if (!message.isEmpty()) {
                     sendMessage(viewModel.createTextMessage(message))
                     updateMessages(message, isSelf = true)
@@ -105,21 +112,44 @@ class MessageFragment : BaseFragment() {
         }
     }
 
+    private fun subscribeAnnotation() {
+        if (IS_TECHNICAN) {
+            viewModel.pointerLocation.observe(this, Observer { position ->
+                sendMessage(viewModel.createPointerMessage(position))
+            })
+
+            //Todo: Debug
+            viewModel.videoState.value = false
+            binding.bottomSheet.buttonVideoOff.isEnabled = false
+        }
+
+    }
+
+    private fun subscribeMessagesButton() {
+        viewModel.messagesState.observe(this, Observer { enabled ->
+            if (enabled) {
+                bottomSheetBehavior.expand()
+            } else {
+                bottomSheetBehavior.collapse()
+            }
+        })
+    }
+
     private fun joinChannel() {
         rtmChannel = rtmClient?.createChannel(
-            args.channel,
+            "remberg",
             rtmChannelListener
         )
 
         rtmChannel?.join(object : ResultCallback<Void?> {
             override fun onSuccess(responseInfo: Void?) {
-                requireActivity().runOnUiThread {
+                runOnUiThread {
                     showToast("Join channel success")
                 }
             }
 
             override fun onFailure(errorInfo: ErrorInfo) {
-                requireActivity().runOnUiThread {
+                runOnUiThread {
                     showToast("Failed to join channel")
                 }
             }
@@ -134,10 +164,10 @@ class MessageFragment : BaseFragment() {
     }
 
     private fun updateMessages(message: String, member: RtmChannelMember? = null, isSelf: Boolean = false) {
-        binding.messages.append("\n ${if (isSelf) "You" else member?.userId}: $message")
+        binding.bottomSheet.messages.append("\n ${if (isSelf) "You" else member?.userId}: $message")
     }
 
-    private fun clearMessageInput() = binding.messageInput.text.clear()
+    private fun clearMessageInput() = binding.bottomSheet.messageInput.text.clear()
 
     private fun sendMessage(message: String) {
         rtmChannel?.sendMessage(rtmClient?.createMessage(message), sendMessageOptions,
@@ -149,7 +179,7 @@ class MessageFragment : BaseFragment() {
                 override fun onSuccess(responseInfo: Void?) { }
 
                 override fun onFailure(errorInfo: ErrorInfo) {
-                    requireActivity().runOnUiThread {
+                    runOnUiThread {
                         when (errorInfo.errorCode) {
                             RtmStatusCode.ChannelMessageError.CHANNEL_MESSAGE_ERR_TIMEOUT,
                             RtmStatusCode.ChannelMessageError.CHANNEL_MESSAGE_ERR_FAILURE ->
@@ -159,6 +189,16 @@ class MessageFragment : BaseFragment() {
                 }
             }
         )
+    }
+
+    override fun onBackPressed() {
+        if (bottomSheetBehavior.isExpanded()) {
+            bottomSheetBehavior.collapse()
+            //Todo: Add bottomsheet callback
+            viewModel.messagesState.value = false
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun onDestroy() {

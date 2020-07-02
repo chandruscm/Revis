@@ -22,6 +22,5 @@
         <corners
             android:topLeftRadius="3dp"
             android:topRightRadius="3dp" />
-        <solid android:color="?colorPrimary" />
     </shape>
 </inset>

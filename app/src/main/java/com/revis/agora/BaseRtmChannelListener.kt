@@ -12,6 +12,7 @@ import com.revis.ui.message.Message.Type.TEXT
 import com.revis.ui.message.Message.Type.POINTER
 import com.revis.ui.message.Message.Type.ARROW
 import com.revis.ui.message.Message.Type.CLEAR
+import com.revis.ui.message.Position
 
 /**
  * Create own callbacks for custom message types.
@@ -20,9 +21,9 @@ open class BaseRtmChannelListener : RtmChannelListener {
 
     open fun onTextMessageReceived(text: String, member: RtmChannelMember) { }
 
-    open fun onPointerMessageReceived(x: Int, y: Int) { }
+    open fun onPointerMessageReceived(position: Position) { }
 
-    open fun onArrowMessageReceived(step: String, x: Int, y: Int) { }
+    open fun onArrowMessageReceived(step: String, position: Position) { }
 
     open fun onClearMessageReceived() { }
 
@@ -37,8 +38,8 @@ open class BaseRtmChannelListener : RtmChannelListener {
         Gson().fromJson(rtmMessage.text, Message::class.java).let { message ->
             when (message.type) {
                 TEXT -> onTextMessageReceived(message.body!!, member)
-                POINTER -> onPointerMessageReceived(message.position!!.x, message.position.y)
-                ARROW -> onArrowMessageReceived(message.body!!, message.position!!.x, message.position.y)
+                POINTER -> onPointerMessageReceived(message.position!!)
+                ARROW -> onArrowMessageReceived(message.body!!, message.position!!)
                 CLEAR -> onClearMessageReceived()
             }
         }

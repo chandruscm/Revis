@@ -1,8 +1,12 @@
 package com.revis.di.module
 
 import android.content.Context
+import com.google.gson.Gson
 import com.revis.agora.BaseRtcEngine
+import com.revis.di.scope.ActivityScope
 import com.revis.di.scope.ApplicationScope
+import com.revis.ui.video.VideoCallViewModel
+import com.revis.ui.video.VideoCallViewModelFactory
 import dagger.Module
 import dagger.Provides
 import io.agora.rtc.video.VideoEncoderConfiguration
@@ -30,4 +34,14 @@ class VideoCallModule {
         appId: String,
         configuration: VideoEncoderConfiguration
     ) = BaseRtcEngine.Factory(context, appId, configuration)
+
+    @Provides
+    @ApplicationScope
+    fun provideVideoCallViewModelFactory(gson: Gson) =
+        VideoCallViewModelFactory(gson)
+
+    @Provides
+    @ApplicationScope
+    fun provideVideoCallViewModel(factory: VideoCallViewModelFactory) =
+        factory.create(VideoCallViewModel::class.java)
 }

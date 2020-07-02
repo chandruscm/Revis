@@ -1,25 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main"
-    app:startDestination="@id/contactsFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/contactsFragment"
-        android:name="com.revis.ui.home.HomeFragment"
-        android:label="ContactsFragment" >
-        <action
-            android:id="@+id/action_contactsFragment_to_videoCallFragment"
-            app:destination="@id/videoCallFragment" />
-        <deepLink
-            android:id="@+id/deepLink"
-            app:uri="https://revis.com/?channel={channel}"/>
+        android:id="@+id/messageFragment"
+        android:name="com.revis.ui.message.MessageFragment"
+        android:label="MessageFragment">
         <argument
             android:name="channel"
             app:argType="string"
             android:defaultValue=""/>
-        <action
-            android:id="@+id/action_contactsFragment_to_messageFragment"
-            app:destination="@id/messageFragment" />
     </fragment>
     <fragment
         android:id="@+id/videoCallFragment"
@@ -30,13 +21,28 @@
             app:argType="string"
             android:defaultValue=""/>
     </fragment>
-    <fragment
-        android:id="@+id/messageFragment"
-        android:name="com.revis.ui.message.MessageFragment"
-        android:label="MessageFragment">
+    <activity
+        android:id="@+id/videoCallActivity"
+        android:name="com.revis.ui.video.VideoCallActivity"
+        android:label="VideoCallActivity">
         <argument
             android:name="channel"
             app:argType="string"
             android:defaultValue=""/>
+    </activity>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.revis.ui.home.HomeFragment"
+        android:label="HomeFragment" >
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://revis.com/?channel={channel}"/>
+        <argument
+            android:name="channel"
+            app:argType="string"
+            android:defaultValue=""/>
+        <action
+            android:id="@+id/action_homeFragment_to_videoCallActivity"
+            app:destination="@id/videoCallActivity" />
     </fragment>
 </navigation>
