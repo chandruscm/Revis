@@ -20,14 +20,14 @@ fun getSampleContacts(resources: Resources) = listOf(
     ),
     Contact(
         id = 2,
-        name = "Joseph Gonzalez",
+        name = "Anastasiya Pavlova",
         company = "WR Kompressorenservice",
         image = R.drawable.contact_2,
         status = AWAY
     ),
     Contact(
         id = 3,
-        name = "Anastasiya Pavlova",
+        name = "Joseph Gonzalez",
         company = "WR Kompressorenservice",
         image = R.drawable.contact_3,
         status = BUSY
