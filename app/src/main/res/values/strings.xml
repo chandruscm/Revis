@@ -6,9 +6,12 @@
     <string name="button_send">Send</string>
 
     <!-- Home Fragment -->
-    <string name="tab_all_technicians">All technicians</string>
+    <string name="tab_all_technicians">All contacts</string>
     <string name="tab_call_logs">Call logs</string>
     <string name="start_call_operator">Request Service</string>
+    <string name="status_online">Online</string>
+    <string name="status_away">Away</string>
+    <string name="status_busy">Busy</string>
 
     <!-- Video Call -->
     <string name="pause_call">Pause</string>

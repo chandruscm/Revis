@@ -20,7 +20,7 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|snap|enterAlways"
+                app:layout_scrollFlags="snap|enterAlways"
                 >
 
                 <androidx.appcompat.widget.Toolbar
@@ -61,6 +61,14 @@
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="noScroll"
                 style="@style/TabLayout"
+                />
+
+            <View
+                android:id="@+id/separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="@color/greyLight"
                 />
 
         </com.google.android.material.appbar.AppBarLayout>

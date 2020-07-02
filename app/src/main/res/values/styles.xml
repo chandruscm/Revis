@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorControlHighlight">@color/colorAccentLight</item>
         <item name="android:fontFamily">@font/red_hat</item>
     </style>
 
@@ -17,16 +18,31 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="PrimaryText">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/font_medium</item>
+    </style>
+
+    <style name="SecondaryText">
+        <item name="android:textSize">@dimen/font_small</item>
+    </style>
+
     <style name="TabLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="tabIndicator">@drawable/tab_indicator</item>
         <item name="tabIndicatorColor">@color/colorAccent</item>
-        <item name="tabSelectedTextColor">@color/colorAccent</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabSelectedTextColor">@color/colorPrimary</item>
         <item name="tabTextAppearance">@style/TabLayoutTextAppearance</item>
+        <item name="tabRippleColor">@color/colorAccentLight</item>
     </style>
 
     <style name="TabLayoutTextAppearance" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="android:textSize">@dimen/font_medium</item>
-        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CircularImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 
     <style name="ExtendedFloatingButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
