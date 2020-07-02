@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.revis.ui.contacts.ContactsViewHolder.ContactItemHolder
 import com.revis.databinding.ListItemContactBinding
 
-class ContactsAdapter : ListAdapter<Contact, ContactsViewHolder>(DiffCallback) {
+class ContactsAdapter : ListAdapter<Contact, ContactsViewHolder>(ConctactsDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -34,7 +34,7 @@ sealed class ContactsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
     ) : ContactsViewHolder(binding.root)
 }
 
-object DiffCallback : DiffUtil.ItemCallback<Contact>() {
+object ConctactsDiffCallback : DiffUtil.ItemCallback<Contact>() {
 
     override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean {
         return oldItem.id == newItem.id

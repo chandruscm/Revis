@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="callLog"
+            type="com.revis.ui.contacts.CallLog" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/spacing_medium"
+        android:paddingBottom="@dimen/spacing_medium"
+        android:background="?android:selectableItemBackground"
+        android:focusable="true"
+        android:clickable="true"
+        >
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="@dimen/spacing_large"
+            app:shapeAppearanceOverlay="@style/CircularImageView"
+            app:setImageResource="@{callLog.contact.image}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/circle_button_selected"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5"
+            />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:text="@{callLog.contact.name}"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal"
+            app:layout_constraintStart_toEndOf="@+id/image"
+            style="@style/PrimaryText"
+            tools:text="Marc Schumacher"
+            />
+
+        <TextView
+            android:id="@+id/company"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:text="@{callLog.contact.company}"
+            app:layout_constraintStart_toEndOf="@+id/image"
+            app:layout_constraintTop_toTopOf="@+id/guideline_horizontal"
+            style="@style/SecondaryText"
+            tools:text="WR Kompressorenservice "
+            />
+
+        <ImageView
+            android:id="@+id/status"
+            setState="@{callLog.state}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal"
+            app:layout_constraintStart_toStartOf="@+id/timeText"
+            app:layout_constraintEnd_toEndOf="@+id/timeText"
+            tools:srcCompat="@drawable/ic_call_outgoing"
+            />
+
+        <TextView
+            android:id="@+id/timeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_large"
+            android:text="@{callLog.timeText}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_vertical"
+            app:layout_constraintTop_toTopOf="@+id/guideline_horizontal"
+            style="@style/SecondaryText"
+            tools:text="10:30 am"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

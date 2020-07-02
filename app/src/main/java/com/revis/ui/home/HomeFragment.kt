@@ -1,11 +1,9 @@
 package com.revis.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -13,7 +11,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.revis.R
 import com.revis.databinding.FragmentHomeBinding
 import com.revis.ui.contacts.AllContactsFragment
-import com.revis.ui.contacts.CallLogsFragments
+import com.revis.ui.contacts.CallLogsFragment
 import com.revis.ui.shared.BaseFragment
 import com.revis.utils.makeVisible
 
@@ -91,7 +89,7 @@ class HomeFragment : BaseFragment() {
 
         override fun createFragment(position: Int) = when (position) {
             0 -> AllContactsFragment.newInstance()
-            else -> CallLogsFragments.newInstance()
+            else -> CallLogsFragment.newInstance()
         }
     }
 }
