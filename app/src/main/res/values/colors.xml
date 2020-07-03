@@ -11,5 +11,6 @@
     <color name="red">#CA4031</color>
     <color name="greyLight">#88B6B6B6</color>
     <color name="green">#59CA31</color>
+    <color name="greenLight">#c7e298</color>
     <color name="yellow">#E4D332</color>
 </resources>

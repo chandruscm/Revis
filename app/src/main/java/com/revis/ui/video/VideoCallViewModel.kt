@@ -1,11 +1,15 @@
 package com.revis.ui.video
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.revis.ui.message.Message
+import com.revis.ui.message.MessageChip
 import com.revis.ui.message.Position
 import com.revis.utils.flipBoolean
+import com.revis.utils.notifyObserver
+import io.agora.rtm.RtmChannelMember
 import io.agora.rtm.RtmMessage
 import javax.inject.Inject
 
@@ -18,6 +22,8 @@ class VideoCallViewModel @Inject constructor(
     val micState = MutableLiveData(false)
     val messagesState = MutableLiveData(false)
     val pointerLocation = MutableLiveData(Position(0f, 0f))
+
+    val messageList = MutableLiveData(arrayListOf<MessageChip>())
 
     fun createTextMessage(message: String): String {
         return gson.toJson(Message(Message.Type.TEXT, message))
@@ -33,6 +39,22 @@ class VideoCallViewModel @Inject constructor(
 
     fun getMessageFromRtm(rtmMessage: RtmMessage): Message {
         return gson.fromJson(rtmMessage.text, Message::class.java)
+    }
+
+    fun addNewMessage(message: String, member: RtmChannelMember? = null, isSelf: Boolean) {
+        Log.i("VideoCall", "Adding message $message")
+        messageList.value?.add(
+            MessageChip(
+                System.currentTimeMillis().toInt(),
+                member,
+                message,
+                isSelf
+            )
+        )
+        messageList.notifyObserver()
+        messageList.value?.forEach { item ->
+            Log.i("VideoCall", "List element : $item")
+        }
     }
 
     fun toggleCamera() = cameraState.flipBoolean()

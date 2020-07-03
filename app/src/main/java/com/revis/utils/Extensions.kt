@@ -75,3 +75,10 @@ fun Fragment.displayMetrics(): DisplayMetrics {
     requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
     return displayMetrics
 }
+
+/**
+ * Better way to update lists contained in a MutableLiveData
+ */
+fun <T> MutableLiveData<T>.notifyObserver() {
+    this.value = this.value
+}

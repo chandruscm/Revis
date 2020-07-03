@@ -2,7 +2,6 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <data>
@@ -13,7 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         android:background="@drawable/background_bottom_sheet"
         app:layout_behavior="@string/bottom_sheet_behavior"
         android:focusable="true"
@@ -94,36 +93,70 @@
             />
 
         <TextView
-            android:id="@+id/messages"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:text="Messages will appear here"
-            android:textSize="24dp"
-            app:layout_constraintBottom_toTopOf="@+id/message_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/spacing_large"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/font_huge"
+            android:textColor="@color/colorAccentLight"
+            android:text="revis"
+            app:layout_constraintBottom_toTopOf="@+id/message_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/separator"
             />
 
-        <EditText
-            android:id="@+id/message_input"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/spacing_smaller"
+            app:layout_constraintBottom_toTopOf="@+id/message_input_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator"
+            />
+
+        <FrameLayout
+            android:id="@+id/message_input_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/chat_input_hint"
+            android:layout_marginStart="@dimen/spacing_smaller"
+            android:layout_marginEnd="@dimen/spacing_smaller"
+            android:layout_marginBottom="@dimen/spacing_smaller"
+            android:background="@drawable/message_box_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button_send_message"
             app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="Autofill"
-            />
+            >
 
-        <Button
+            <EditText
+                android:id="@+id/message_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="@dimen/spacing_small"
+                android:paddingBottom="@dimen/spacing_small"
+                android:paddingStart="@dimen/spacing_medium"
+                android:paddingEnd="@dimen/spacing_medium"
+                android:gravity="center_vertical"
+                android:background="@android:color/transparent"
+                android:hint="@string/message_box_hint"
+                android:textSize="@dimen/font_medium"
+                android:textColor="@color/colorPrimary"
+                />
+
+        </FrameLayout>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_send_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button_send"
+            android:layout_marginEnd="@dimen/spacing_smaller"
+            app:icon="@drawable/ic_send"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/message_input"
-            app:layout_constraintBottom_toBottomOf="@id/message_input"
+            app:layout_constraintBottom_toBottomOf="@+id/message_input_layout"
+            app:layout_constraintTop_toTopOf="@+id/message_input_layout"
+            style="@style/CircularIconButton"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

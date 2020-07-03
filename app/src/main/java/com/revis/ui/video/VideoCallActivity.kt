@@ -1,16 +1,22 @@
 package com.revis.ui.video
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.revis.R
 import com.revis.agora.BaseRtmChannelListener
 import com.revis.agora.BaseRtmClient
 import com.revis.agora.BaseRtmClientListener
 import com.revis.databinding.ActivityVideoCallBinding
+import com.revis.ui.message.MessageChipAdapter
 import com.revis.ui.message.Position
 import com.revis.ui.shared.BaseActivity
 import com.revis.utils.*
@@ -45,7 +51,7 @@ class VideoCallActivity : BaseActivity() {
 
         override fun onTextMessageReceived(text: String, member: RtmChannelMember) {
             runOnUiThread {
-                updateMessages(text, member, false)
+                viewModel.addNewMessage(text, member, false)
             }
         }
 
@@ -63,6 +69,8 @@ class VideoCallActivity : BaseActivity() {
 
     private var rtmChannel: RtmChannel? = null
 
+    private lateinit var adapter: MessageChipAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(
@@ -73,8 +81,9 @@ class VideoCallActivity : BaseActivity() {
 
         initAgora()
         initBottomSheet()
+        initRecyclerView()
         initListeners()
-        subscribeAnnotation()
+        subscribeUi()
     }
 
     private fun initAgora() {
@@ -99,23 +108,40 @@ class VideoCallActivity : BaseActivity() {
             bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.root as ConstraintLayout)
             bottomSheetBehavior.peekHeight = view.top
             bottomSheetBehavior.isDraggable = false
+            bottomSheetBehavior.addBottomSheetCallback(
+
+                object : BottomSheetBehavior.BottomSheetCallback() {
+                    override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                    }
+
+                    override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    }
+                }
+            )
             subscribeMessagesButton()
         }
+    }
+
+    private fun initRecyclerView() {
+        adapter = MessageChipAdapter()
+        binding.bottomSheet.recyclerView.adapter = adapter
+        binding.bottomSheet.recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
     private fun initListeners() {
         binding.bottomSheet.buttonSendMessage.setOnClickListener {
             binding.bottomSheet.messageInput.text.toString().let { message ->
                 if (!message.isEmpty()) {
+                    showToast(message)
                     sendMessage(viewModel.createTextMessage(message))
-                    updateMessages(message, isSelf = true)
+                    viewModel.addNewMessage(message, null, true)
                     clearMessageInput()
                 }
             }
         }
     }
 
-    private fun subscribeAnnotation() {
+    private fun subscribeUi() {
         if (IS_TECHNICAN) {
             viewModel.pointerLocation.observe(this, Observer { position ->
                 sendMessage(viewModel.createPointerMessage(position))
@@ -126,6 +152,14 @@ class VideoCallActivity : BaseActivity() {
             binding.bottomSheet.buttonVideoOff.isEnabled = false
         }
 
+        viewModel.messageList.observe(this, Observer { messages ->
+            Log.i("VideoCallActivity", messages.toString())
+            adapter.submitList(messages)
+            /**
+             * Ideally you shouldn't have to call this. Unintended Behaviour.
+             */
+            adapter.notifyDataSetChanged()
+        })
     }
 
     private fun subscribeMessagesButton() {
@@ -164,10 +198,6 @@ class VideoCallActivity : BaseActivity() {
             leave(null)
             release()
         }
-    }
-
-    private fun updateMessages(message: String, member: RtmChannelMember? = null, isSelf: Boolean = false) {
-        binding.bottomSheet.messages.append("\n ${if (isSelf) "You" else member?.userId}: $message")
     }
 
     private fun clearMessageInput() = binding.bottomSheet.messageInput.text.clear()

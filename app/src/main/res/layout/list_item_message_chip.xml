@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <variable
+            name="messageChip"
+            type="com.revis.ui.message.MessageChip" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <FrameLayout
+            android:id="@+id/message_left_box"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginStart="@dimen/spacing_smaller"
+            android:layout_marginEnd="116dp"
+            android:layout_marginTop="@dimen/spacing_smaller"
+            app:goneUnless="@{!messageChip.isSelf}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <TextView
+                android:id="@+id/message_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:background="@drawable/message_chip_left_background"
+                android:paddingStart="@dimen/spacing_small"
+                android:paddingTop="@dimen/spacing_tiny"
+                android:paddingEnd="@dimen/spacing_small"
+                android:paddingBottom="@dimen/spacing_tiny"
+                android:textSize="@dimen/font_medium"
+                android:text="@{messageChip.text}"
+                tools:text="Hifadsfas dfadsfadsf asdfasdfa sfasdfadsf asdf asdf asdf asdf !"
+                />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/message_right_box"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/spacing_smaller"
+            android:layout_marginEnd="@dimen/spacing_smaller"
+            android:layout_marginStart="116dp"
+            app:goneUnless="@{messageChip.isSelf}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/message_right"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="@drawable/message_chip_right_background"
+                android:paddingStart="@dimen/spacing_small"
+                android:paddingTop="@dimen/spacing_tiny"
+                android:paddingEnd="@dimen/spacing_small"
+                android:paddingBottom="@dimen/spacing_tiny"
+                android:textSize="@dimen/font_medium"
+                android:text="@{messageChip.text}"
+                tools:text="Hi!" />
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

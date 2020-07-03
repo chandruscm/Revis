@@ -54,9 +54,22 @@
         <item name="android:textSize">@dimen/font_medium</item>
     </style>
 
-    <style name="CircularImageView">
+    <style name="CircularShape">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="CircularIconButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="iconPadding">4dp</item>
+        <item name="iconGravity">textEnd</item>
+        <item name="shapeAppearanceOverlay">@style/CircularShape</item>
     </style>
 
     <style name="ExtendedFloatingButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
