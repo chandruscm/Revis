@@ -1,16 +1,16 @@
 package com.revis.ui.video
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.revis.R
 import com.revis.agora.BaseRtmChannelListener
 import com.revis.agora.BaseRtmClient
@@ -78,6 +78,7 @@ class VideoCallActivity : BaseActivity() {
         )
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+        binding.callTimer.setTypeface(ResourcesCompat.getFont(this, R.font.red_hat))
 
         initAgora()
         initBottomSheet()
@@ -92,7 +93,10 @@ class VideoCallActivity : BaseActivity() {
         rtmClient?.login(null, randomUUID, object : ResultCallback<Void?> {
 
             override fun onSuccess(responseInfo: Void?) {
-                joinChannel()
+                runOnUiThread {
+                    startCallTimer()
+                    joinChannel()
+                }
             }
 
             override fun onFailure(errorInfo: ErrorInfo) {
@@ -172,6 +176,14 @@ class VideoCallActivity : BaseActivity() {
         })
     }
 
+    private fun startCallTimer() = binding.callTimer.start()
+
+    private fun stopCallTimer() = binding.callTimer.stop()
+
+    private fun getCallDuration(): Long {
+        return binding.callTimer.base - SystemClock.elapsedRealtime()
+    }
+
     private fun joinChannel() {
         rtmChannel = rtmClient?.createChannel(
             "remberg",
@@ -179,11 +191,7 @@ class VideoCallActivity : BaseActivity() {
         )
 
         rtmChannel?.join(object : ResultCallback<Void?> {
-            override fun onSuccess(responseInfo: Void?) {
-                runOnUiThread {
-                    showToast("Join channel success")
-                }
-            }
+            override fun onSuccess(responseInfo: Void?) { }
 
             override fun onFailure(errorInfo: ErrorInfo) {
                 runOnUiThread {

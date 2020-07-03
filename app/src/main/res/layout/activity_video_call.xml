@@ -2,6 +2,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <data>
@@ -24,10 +25,80 @@
             app:navGraph="@navigation/video"
             />
 
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="snap|enterAlways">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentInsetStart="0dp"
+                    android:contentInsetLeft="0dp"
+                    app:contentInsetLeft="0dp"
+                    app:contentInsetStart="0dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/spacing_small">
+
+                        <TextView
+                            android:id="@+id/app_bar_title"
+                            style="@style/AppBarTitleText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:paddingStart="4dp"
+                            android:paddingEnd="4dp"
+                            android:text="@string/service_call_title" />
+
+                        <Chronometer
+                            android:id="@+id/call_timer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/app_bar_title"
+                            android:layout_alignParentStart="true"
+                            android:paddingStart="4dp"
+                            android:paddingEnd="4dp"
+                            android:textColor="@color/colorPrimary"
+                            />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/button_end_call"
+                            style="@style/UnelevatedSolidButtonStyle.CallEnd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:text="@string/end_call"
+                            />
+
+                    </RelativeLayout>
+
+                </androidx.appcompat.widget.Toolbar>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
         <include
             android:id="@+id/bottom_sheet"
             layout="@layout/bottom_sheet_video_call"
             app:viewModel="@{viewModel}"
+            />
+
+        <View
+            android:id="@+id/shadow"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacing_small"
+            android:background="@drawable/top_shadow_background"
+            app:layout_anchor="@+id/bottom_sheet"
             />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton

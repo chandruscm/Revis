@@ -16,6 +16,8 @@
     <!-- Video Call -->
     <string name="pause_call">Pause</string>
     <string name="message_box_hint">Type a message</string>
+    <string name="service_call_title">revis call</string>
+    <string name="end_call">End call</string>
 
     <!-- Deep link Dialog -->
     <string name="join_call_via_link_prompt">Would you like to join this servicing call using the revis app?</string>

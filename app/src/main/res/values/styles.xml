@@ -91,7 +91,7 @@
 
     <style name="SolidButtonStyle" parent="@style/Widget.MaterialComponents.Button">
         <item name="android:textSize">@dimen/font_small</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/whiteDirty</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
@@ -109,6 +109,16 @@
         <item name="android:textSize">@dimen/font_small</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="UnelevatedSolidButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textSize">@dimen/font_small</item>
+        <item name="android:textColor">@color/whiteDirty</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="UnelevatedSolidButtonStyle.CallEnd">
+        <item name="android:backgroundTint">@color/red</item>
     </style>
 
 </resources>
