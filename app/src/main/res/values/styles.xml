@@ -22,6 +22,16 @@
         <item name="android:fontFamily">@font/red_hat</item>
     </style>
 
+    <style name="VideoCallSettingsDialogTheme" parent="Theme.MaterialComponents.Dialog">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/deep_link_dialog_prompt_background</item>
+        <item name="android:colorControlHighlight">@color/colorAccentLight</item>
+        <item name="android:fontFamily">@font/red_hat</item>
+    </style>
+
     <style name="AppBarTitleText">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">@dimen/font_extra_large</item>
@@ -46,12 +56,43 @@
         <item name="tabIndicatorColor">@color/colorAccent</item>
         <item name="tabIndicatorFullWidth">false</item>
         <item name="tabSelectedTextColor">@color/colorPrimary</item>
+        <item name="tabTextColor">@color/greyDark</item>
         <item name="tabTextAppearance">@style/TabLayoutTextAppearance</item>
         <item name="tabRippleColor">@color/colorAccentLight</item>
     </style>
 
     <style name="TabLayoutTextAppearance" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="android:textSize">@dimen/font_medium</item>
+    </style>
+
+    <style name="RadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:textSize">@dimen/font_medium</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:paddingStart">@dimen/spacing_medium</item>
+        <item name="android:paddingEnd">@dimen/spacing_medium</item>
+        <item name="android:paddingTop">@dimen/spacing_small</item>
+        <item name="android:paddingBottom">@dimen/spacing_small</item>
+        <item name="android:button">@null</item>
+        <item name="android:drawableStart">?android:attr/listChoiceIndicatorSingle</item>
+        <item name="android:drawablePadding">@dimen/spacing_small</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:background">?selectableItemBackground</item>
+    </style>
+
+    <style name="CheckBoxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:textSize">@dimen/font_medium</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:paddingStart">@dimen/spacing_medium</item>
+        <item name="android:paddingEnd">@dimen/spacing_medium</item>
+        <item name="android:paddingTop">@dimen/spacing_small</item>
+        <item name="android:paddingBottom">@dimen/spacing_small</item>
+        <item name="android:button">@null</item>
+        <item name="android:drawableStart">?android:attr/listChoiceIndicatorMultiple</item>
+        <item name="android:drawablePadding">@dimen/spacing_small</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:focusable">true</item>
+        <item name="android:selectable">true</item>
+        <item name="android:background">?selectableItemBackground</item>
     </style>
 
     <style name="CircularShape">

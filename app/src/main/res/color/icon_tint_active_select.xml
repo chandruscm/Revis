@@ -9,7 +9,7 @@
         android:color="@color/whiteDirty"
         />
 
-    <item android:color="@color/greyLight"
+    <item android:color="@color/colorPrimaryDark"
         />
 
 </selector>

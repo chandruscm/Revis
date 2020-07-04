@@ -136,7 +136,6 @@ class VideoCallActivity : BaseActivity() {
         binding.bottomSheet.buttonSendMessage.setOnClickListener {
             binding.bottomSheet.messageInput.text.toString().let { message ->
                 if (!message.isEmpty()) {
-                    showToast(message)
                     sendMessage(viewModel.createTextMessage(message))
                     viewModel.addNewMessage(message, null, true)
                     clearMessageInput()

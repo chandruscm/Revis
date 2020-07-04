@@ -6,5 +6,13 @@
     <fragment
         android:id="@+id/videoCallFragment2"
         android:name="com.revis.ui.video.VideoCallFragment"
-        android:label="VideoCallFragment" />
+        android:label="VideoCallFragment" >
+        <action
+            android:id="@+id/action_videoCallFragment2_to_videoCallSettingsDialog"
+            app:destination="@id/videoCallSettingsDialog" />
+    </fragment>
+    <dialog
+        android:id="@+id/videoCallSettingsDialog"
+        android:name="com.revis.ui.video.VideoCallSettingsDialog"
+        android:label="VideoCallSettingsDialog" />
 </navigation>

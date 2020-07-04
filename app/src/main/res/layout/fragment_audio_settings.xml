@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.revis.ui.video.VideoCallViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingBottom="@dimen/spacing_small"
+        android:orientation="vertical"
+        >
+
+        <CheckBox
+            android:id="@+id/option_audio_speaker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_audio_speaker"
+            android:checked="@{viewModel.speakerState}"
+            android:onClick="@{() -> viewModel.toggleSpeaker()}"
+            style="@style/CheckBoxStyle"
+            />
+
+    </LinearLayout>
+
+</layout>

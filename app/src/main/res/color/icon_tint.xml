@@ -11,7 +11,7 @@
         />
 
     <item
-        android:color="@color/greyLight"
+        android:color="@color/colorPrimaryDark"
         />
 
 </selector>

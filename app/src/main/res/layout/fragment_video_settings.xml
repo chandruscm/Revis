@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.revis.ui.video.VideoCallViewModel"/>
+
+        <variable
+            name="constants"
+            type="com.revis.utils.ConstantsKt" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingBottom="@dimen/spacing_small"
+        android:orientation="vertical"
+        >
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:checkedButton="@{viewModel.videoQualitySetting}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <RadioButton
+                android:id="@+id/option_video_low"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_video_low"
+                android:onClick="@{() -> viewModel.setVideoQualitySetting(constants.VIDEO_QUALITY_LOW)}"
+                style="@style/RadioButtonStyle"
+                />
+
+            <RadioButton
+                android:id="@+id/option_video_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_video_medium"
+                android:onClick="@{() -> viewModel.setVideoQualitySetting(constants.VIDEO_QUALITY_MEDIUM)}"
+                style="@style/RadioButtonStyle"
+                />
+
+            <RadioButton
+                android:id="@+id/option_video_high"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_video_high"
+                android:onClick="@{() -> viewModel.setVideoQualitySetting(constants.VIDEO_QUALITY_HIGH)}"
+                style="@style/RadioButtonStyle"
+                />
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+</layout>

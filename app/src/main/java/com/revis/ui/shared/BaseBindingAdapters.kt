@@ -2,6 +2,7 @@ package com.revis.ui.shared
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
@@ -11,8 +12,14 @@ object BaseBindingAdapters {
 
     @BindingAdapter("isSelected")
     @JvmStatic
-    fun bindIsSelectedStatus(button: ImageButton, selected: Boolean) {
+    fun bindIsSelected(button: ImageButton, selected: Boolean) {
         button.isSelected = selected
+    }
+
+    @BindingAdapter("isChecked")
+    @JvmStatic
+    fun bindIsChecked(checkBox: CheckBox, checked: Boolean) {
+        checkBox.isChecked = checked
     }
 
     @BindingAdapter("setImageResource")

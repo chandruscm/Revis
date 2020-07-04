@@ -2,25 +2,24 @@ package com.revis.ui.video
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.revis.R
 import com.revis.agora.BaseRtcEngine
 import com.revis.databinding.FragmentVideoCallBinding
 import com.revis.ui.shared.BaseFragment
-import com.revis.utils.IS_TECHNICAN
-import com.revis.utils.displayMetrics
-import com.revis.utils.makeGone
-import com.revis.utils.makeVisible
+import com.revis.utils.*
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.video.VideoCanvas
+import io.agora.rtc.video.VideoEncoderConfiguration
 import javax.inject.Inject
-
+import javax.inject.Named
 
 class VideoCallFragment : BaseFragment() {
 
@@ -36,6 +35,18 @@ class VideoCallFragment : BaseFragment() {
 
     @Inject
     lateinit var rtcEngineFactory : BaseRtcEngine.Factory
+
+    @Inject
+    @Named("VIDEO_SETTING_LOW")
+    lateinit var lowVideoEncoderConfiguration: VideoEncoderConfiguration
+
+    @Inject
+    @Named("VIDEO_SETTING_MEDIUM")
+    lateinit var mediumVideoEncoderConfiguration: VideoEncoderConfiguration
+
+    @Inject
+    @Named("VIDEO_SETTING_HIGH")
+    lateinit var highVideoEncoderConfiguration: VideoEncoderConfiguration
 
     private val rtcEventHandler = object : IRtcEngineEventHandler() {
 
@@ -195,6 +206,24 @@ class VideoCallFragment : BaseFragment() {
             } else {
                 rtcEngine?.enableLocalAudio(true)
             }
+        })
+
+        viewModel.settingsState.observe(viewLifecycleOwner, Observer {
+            findNavController().navigate(
+                R.id.action_videoCallFragment2_to_videoCallSettingsDialog
+            )
+        })
+
+        viewModel.videoQualitySetting.observe(viewLifecycleOwner, Observer { videoQualitySetting ->
+            rtcEngine?.setVideoEncoderConfiguration(when (videoQualitySetting) {
+                VIDEO_QUALITY_LOW -> lowVideoEncoderConfiguration
+                VIDEO_QUALITY_MEDIUM -> mediumVideoEncoderConfiguration
+                else -> highVideoEncoderConfiguration
+            })
+        })
+
+        viewModel.speakerState.observe(viewLifecycleOwner, Observer { enabled ->
+            rtcEngine?.setEnableSpeakerphone(enabled)
         })
     }
 

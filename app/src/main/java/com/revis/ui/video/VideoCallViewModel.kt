@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.revis.ui.message.Message
 import com.revis.ui.message.MessageChip
 import com.revis.ui.message.Position
+import com.revis.utils.VIDEO_QUALITY_HIGH
 import com.revis.utils.flipBoolean
 import com.revis.utils.notifyObserver
 import io.agora.rtm.RtmChannelMember
@@ -21,9 +22,18 @@ class VideoCallViewModel @Inject constructor(
     val videoState = MutableLiveData(false)
     val micState = MutableLiveData(false)
     val messagesState = MutableLiveData(false)
+    val settingsState = MutableLiveData(false)
+    val speakerState = MutableLiveData(true)
+
     val pointerLocation = MutableLiveData(Position(0f, 0f))
 
     val messageList = MutableLiveData(arrayListOf<MessageChip>())
+
+    val videoQualitySetting = MutableLiveData(VIDEO_QUALITY_HIGH)
+
+    init {
+//        messageList.value = getSampleMessages()
+    }
 
     fun createTextMessage(message: String): String {
         return gson.toJson(Message(Message.Type.TEXT, message))
@@ -64,6 +74,15 @@ class VideoCallViewModel @Inject constructor(
     fun toggleMic() = micState.flipBoolean()
 
     fun toggleMessages() = messagesState.flipBoolean()
+
+    fun toggleSettings() = settingsState.flipBoolean()
+
+    fun toggleSpeaker() = speakerState.flipBoolean()
+
+    fun setVideoQualitySetting(videoQualitySetting: Int) {
+        this.videoQualitySetting.value = videoQualitySetting
+        Log.i("Video", "New video quality ${videoQualitySetting}")
+    }
 
     fun movePointer(x: Float, y: Float) {
         pointerLocation.value = Position(x, y)
