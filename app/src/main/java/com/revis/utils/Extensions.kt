@@ -61,11 +61,26 @@ fun BottomSheetBehavior<ConstraintLayout>.isExpanded(): Boolean {
 }
 
 /**
+ * Check if BottomSheet is hidden
+ */
+fun BottomSheetBehavior<ConstraintLayout>.isHidden(): Boolean {
+    return this.state == BottomSheetBehavior.STATE_HIDDEN
+}
+
+/**
  * Collapse a BottomSheet
  */
 fun BottomSheetBehavior<ConstraintLayout>.collapse() {
     this.state = BottomSheetBehavior.STATE_COLLAPSED
 }
+
+/**
+ * Hide a BottomSheet
+ */
+fun BottomSheetBehavior<ConstraintLayout>.hide() {
+    this.state = BottomSheetBehavior.STATE_HIDDEN
+}
+
 
 /**
  * Get screen width and height

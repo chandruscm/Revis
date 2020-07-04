@@ -2,7 +2,6 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <data>
@@ -26,15 +25,17 @@
             />
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
+            android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white">
+            android:background="@color/white"
+            >
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_scrollFlags="snap|enterAlways">
+                app:layout_scrollFlags="scroll|snap|enterAlways"
+                >
 
                 <androidx.appcompat.widget.Toolbar
                     android:layout_width="match_parent"
@@ -42,12 +43,14 @@
                     android:contentInsetStart="0dp"
                     android:contentInsetLeft="0dp"
                     app:contentInsetLeft="0dp"
-                    app:contentInsetStart="0dp">
+                    app:contentInsetStart="0dp"
+                    >
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/spacing_small">
+                        android:padding="@dimen/spacing_small"
+                        >
 
                         <TextView
                             android:id="@+id/app_bar_title"

@@ -27,6 +27,7 @@ import io.agora.rtm.RtmClient
 import io.agora.rtm.ResultCallback
 import io.agora.rtm.ErrorInfo
 import io.agora.rtm.RtmStatusCode
+import kotlinx.android.synthetic.main.activity_video_call.*
 import java.util.UUID
 import javax.inject.Inject
 
@@ -78,6 +79,7 @@ class VideoCallActivity : BaseActivity() {
         )
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+        // Setting chronometer font via xml does not work for some reason!
         binding.callTimer.setTypeface(ResourcesCompat.getFont(this, R.font.red_hat))
 
         initAgora()
@@ -141,6 +143,10 @@ class VideoCallActivity : BaseActivity() {
                     clearMessageInput()
                 }
             }
+        }
+
+        binding.buttonPause.setOnClickListener {
+            toggleFulleScreen()
         }
     }
 
@@ -229,6 +235,16 @@ class VideoCallActivity : BaseActivity() {
                 }
             }
         )
+    }
+
+    private fun toggleFulleScreen() {
+        if (bottomSheetBehavior.isHidden()) {
+            binding.appBarLayout.setExpanded(true, true)
+            bottomSheetBehavior.collapse()
+        } else {
+            binding.appBarLayout.setExpanded(false, true)
+            bottomSheetBehavior.hide()
+        }
     }
 
     override fun onBackPressed() {

@@ -74,7 +74,6 @@ class VideoCallFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initAgora()
-        initListeners()
         setupLocalVideo()
         joinChannel()
         setupAnnotation()
@@ -93,12 +92,6 @@ class VideoCallFragment : BaseFragment() {
             localVideContainer = binding.videoContainerBig
             remoteVideoContainer = binding.videoContainerSmall
             remoteVideoContainer.makeGone()
-        }
-    }
-
-    private fun initListeners() {
-        binding.buttonEndCall.setOnClickListener {
-            requireActivity().onBackPressed()
         }
     }
 
