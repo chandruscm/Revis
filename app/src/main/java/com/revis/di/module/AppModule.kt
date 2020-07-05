@@ -2,6 +2,7 @@ package com.revis.di.module
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import com.revis.BuildConfig
 import com.revis.RevisApplication
 import com.revis.di.scope.ApplicationScope
@@ -30,4 +31,10 @@ class AppModule {
     @Provides
     @ApplicationScope
     fun provideAppId() = BuildConfig.AGORA_APP_ID
+
+    @Provides
+    @ApplicationScope
+    fun provideSharedPreferences(context: Context): SharedPreferences {
+        return context.getSharedPreferences("default", Context.MODE_PRIVATE)
+    }
 }

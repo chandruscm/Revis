@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minWidth="300dp"
         >
 
         <TextView
@@ -14,7 +16,7 @@
             android:layout_height="0dp"
             android:paddingStart="@dimen/spacing_large"
             android:gravity="center_vertical"
-            android:text="@string/app_name"
+            android:text="@string/join_call"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -39,20 +41,36 @@
             app:layout_constraintTop_toBottomOf="@id/guideline"
             />
 
-        <TextView
-            android:id="@+id/text_join_call"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_call_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/spacing_large"
-            android:paddingEnd="@dimen/spacing_large"
-            android:paddingTop="@dimen/spacing_medium"
-            android:paddingBottom="@dimen/spacing_medium"
-            android:text="@string/join_call_via_link_prompt"
+            android:padding="@dimen/spacing_large"
+            android:textColorHint="@color/colorPrimaryDark"
+            app:boxStrokeColor="@color/colorPrimaryDark"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/greyDark"
+            app:hintAnimationEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline"
-            style="@style/PrimaryText"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/app_title"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.5"
+                android:cursorVisible="false"
+                android:hint="@string/service_call_id"
+                android:textColorHint="@color/greyDark"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/font_medium"
+                android:inputType="phone"
+                android:maxLength="6"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_join"
@@ -60,10 +78,10 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/spacing_large"
             android:layout_marginBottom="@dimen/spacing_medium"
-            android:text="@string/join_call"
+            android:text="@string/join"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_join_call"
+            app:layout_constraintTop_toBottomOf="@+id/input_call_id"
             style="@style/SolidButtonStyle.Accent"
             />
 
@@ -74,7 +92,7 @@
             android:layout_marginEnd="@dimen/spacing_medium"
             android:text="@string/cancel"
             app:layout_constraintEnd_toStartOf="@+id/button_join"
-            app:layout_constraintTop_toBottomOf="@+id/text_join_call"
+            app:layout_constraintTop_toBottomOf="@+id/input_call_id"
             style="@style/TextButtonStyle"
             />
 

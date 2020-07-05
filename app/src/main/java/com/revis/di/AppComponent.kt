@@ -6,6 +6,7 @@ import com.revis.di.builder.ActivityBuilder
 import com.revis.di.builder.FragmentBuilder
 import com.revis.di.module.AppModule
 import com.revis.di.module.MessageModule
+import com.revis.di.module.SettingsModule
 import com.revis.di.module.VideoCallModule
 import com.revis.di.scope.ApplicationScope
 import dagger.BindsInstance
@@ -23,7 +24,8 @@ import dagger.android.support.AndroidSupportInjectionModule
         ViewModelBuilder::class,
         AppModule::class,
         VideoCallModule::class,
-        MessageModule::class
+        MessageModule::class,
+        SettingsModule::class
     ]
 )
 interface AppComponent : AndroidInjector<DaggerApplication> {

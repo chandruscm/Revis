@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.revis.R
@@ -19,13 +20,11 @@ class VideoCallSettingsDialog : BaseDialogFragment() {
     @Inject
     lateinit var viewModel: VideoCallViewModel
 
-    private val adapter by lazy {
-        VideoCallSettingsTabAdapter()
-    }
+    private lateinit var adapter: VideoCallSettingsTabAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, R.style.VideoCallSettingsDialogTheme)
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.VideoCallSettingsDialogTheme)
     }
 
     override fun onCreateView(
@@ -34,6 +33,7 @@ class VideoCallSettingsDialog : BaseDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogVideoCallSettingsBinding.inflate(layoutInflater)
+        adapter = VideoCallSettingsTabAdapter()
         with (binding) {
             viewPager.adapter = adapter
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->

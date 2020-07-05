@@ -1,24 +1,26 @@
 package com.revis.ui.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.revis.R
 import com.revis.databinding.FragmentHomeBinding
 import com.revis.ui.contacts.AllContactsFragment
 import com.revis.ui.contacts.CallLogsFragment
+import com.revis.ui.settings.SettingsViewModel
 import com.revis.ui.shared.BaseFragment
+import javax.inject.Inject
 
 class HomeFragment : BaseFragment() {
 
     private lateinit var binding: FragmentHomeBinding
 
-    private val adapter by lazy {
-        HomeTabAdapter()
-    }
+    @Inject
+    lateinit var viewModel: SettingsViewModel
+
+    private lateinit var adapter: HomeTabAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +28,7 @@ class HomeFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(layoutInflater)
+        adapter = HomeTabAdapter()
         with (binding) {
             viewPager.adapter = adapter
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
@@ -39,13 +42,46 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initListeners()
+        initAppBar()
+        setupFab()
     }
 
-    private fun initListeners() {
-        binding.buttonStartCall.setOnClickListener {
+    private fun setupFab() {
+        with(binding.buttonStartCall) {
+            if (viewModel.isUserTechnician.value ?: false) {
+                text = getString(R.string.start_call_technician)
+                setOnClickListener {
 
+                }
+            } else {
+                text = getString(R.string.start_call_operator)
+                setOnClickListener {
+                    showJoinCallOperatorDialog()
+                }
+            }
         }
+    }
+
+    private fun initAppBar() {
+        binding.toolbar.inflateMenu(R.menu.menu_home_fragment)
+        binding.toolbar.setOnMenuItemClickListener { menu: MenuItem? ->
+            if (menu?.itemId == R.id.settingsFragment) {
+                findNavController().navigate(
+                    R.id.action_homeFragment_to_settingsFragment
+                )
+            }
+            true
+        }
+    }
+
+    private fun showStartCallTechnicianDialog() {
+
+    }
+
+    private fun showJoinCallOperatorDialog() {
+        findNavController().navigate(
+            R.id.action_homeFragment_to_joinCallOperatorDialog
+        )
     }
 
     inner class HomeTabAdapter : FragmentStateAdapter(this) {

@@ -5,6 +5,8 @@ import com.revis.ui.contacts.AllContactsFragment
 import com.revis.ui.contacts.CallLogsFragment
 import com.revis.ui.dialog.DeepLinkDialogPromptFragment
 import com.revis.ui.home.HomeFragment
+import com.revis.ui.home.JoinCallOperatorDialog
+import com.revis.ui.settings.SettingsFragment
 import com.revis.ui.video.AudioSettingsFragment
 import com.revis.ui.video.VideoCallFragment
 import com.revis.ui.video.VideoCallSettingsDialog
@@ -21,7 +23,15 @@ abstract class FragmentBuilder {
 
     @FragmentScope
     @ContributesAndroidInjector
-    internal abstract fun provideContactsFragment(): HomeFragment
+    internal abstract fun provideHomeFragment(): HomeFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    internal abstract fun provideJoinCallOperatorDialog(): JoinCallOperatorDialog
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    internal abstract fun provideSettingsFragment(): SettingsFragment
 
     @FragmentScope
     @ContributesAndroidInjector

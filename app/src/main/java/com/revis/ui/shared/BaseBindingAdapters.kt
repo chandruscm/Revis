@@ -2,6 +2,7 @@ package com.revis.ui.shared
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -13,6 +14,12 @@ object BaseBindingAdapters {
     @BindingAdapter("isSelected")
     @JvmStatic
     fun bindIsSelected(button: ImageButton, selected: Boolean) {
+        button.isSelected = selected
+    }
+
+    @BindingAdapter("isSelected")
+    @JvmStatic
+    fun bindIsSelected(button: Button, selected: Boolean) {
         button.isSelected = selected
     }
 
