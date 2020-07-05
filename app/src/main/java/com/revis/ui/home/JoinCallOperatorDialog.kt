@@ -1,9 +1,13 @@
 package com.revis.ui.home
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.DialogFragment
 import com.revis.R
 import com.revis.databinding.DialogJoinCallOperatorBinding
@@ -30,11 +34,19 @@ class JoinCallOperatorDialog : BaseDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListeners()
+        showKeyboard()
     }
 
     private fun initListeners() {
         binding.buttonCancel.setOnClickListener {
             dismiss()
+        }
+    }
+
+    private fun showKeyboard() {
+        if (binding.inputCallId.requestFocus()) {
+            Log.i("JoinCall", "Has Focus")
+            dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         }
     }
 }
