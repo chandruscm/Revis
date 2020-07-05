@@ -35,8 +35,6 @@ class VideoCallFragment : BaseFragment() {
     private lateinit var localVideContainer: FrameLayout
     private lateinit var remoteVideoContainer: FrameLayout
 
-    private val channelName = "remberg"
-
     @Inject
     lateinit var rtcEngineFactory : BaseRtcEngine.Factory
 
@@ -125,7 +123,7 @@ class VideoCallFragment : BaseFragment() {
     private fun joinChannel() {
         // Users can only see each other after they join the
         // same channel successfully using the same app id.
-        rtcEngine?.joinChannel(null, channelName, "Extra Optional Data", 0) // if you do not specify the uid, we will generate the uid for you
+        rtcEngine?.joinChannel(null, viewModel.channel, "Extra Optional Data", 0) // if you do not specify the uid, we will generate the uid for you
     }
 
     private fun leaveChannel() {
@@ -154,6 +152,7 @@ class VideoCallFragment : BaseFragment() {
         // Initializes the video view of a remote user.
         rtcEngine?.setupRemoteVideo(VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FILL, uid))
         surfaceView.tag = uid // for mark purpose
+        viewModel.remoteUserJoined.value = true
     }
 
     private fun onRemoteUserLeft() {
@@ -250,7 +249,7 @@ class VideoCallFragment : BaseFragment() {
                 ANNOTATION_ARROW -> {
                     binding.pointer.makeGone()
                 }
-                ANNOTATION_CLEAR -> {
+                else -> {
                     binding.pointer.makeGone()
                 }
             }

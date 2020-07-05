@@ -46,5 +46,9 @@
     <dialog
         android:id="@+id/joinCallOperatorDialog"
         android:name="com.revis.ui.home.JoinCallOperatorDialog"
-        android:label="JoinCallOperatorDialog" />
+        android:label="JoinCallOperatorDialog" >
+        <action
+            android:id="@+id/action_joinCallOperatorDialog_to_videoCallActivity"
+            app:destination="@id/videoCallActivity" />
+    </dialog>
 </navigation>

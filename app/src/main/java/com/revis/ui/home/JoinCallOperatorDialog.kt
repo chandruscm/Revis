@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
 import com.revis.R
 import com.revis.databinding.DialogJoinCallOperatorBinding
 import com.revis.ui.shared.BaseDialogFragment
@@ -38,6 +39,20 @@ class JoinCallOperatorDialog : BaseDialogFragment() {
     }
 
     private fun initListeners() {
+        binding.buttonJoin.setOnClickListener {
+            binding.inputCallId.text?.toString()?.let { callId ->
+                if (callId.length == 6) {
+                    findNavController().navigate(
+                        JoinCallOperatorDialogDirections
+                            .actionJoinCallOperatorDialogToVideoCallActivity(
+                                callId
+                            )
+                    )
+                    dismiss()
+                }
+            }
+        }
+
         binding.buttonCancel.setOnClickListener {
             dismiss()
         }

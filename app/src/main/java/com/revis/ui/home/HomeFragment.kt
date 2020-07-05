@@ -12,6 +12,7 @@ import com.revis.ui.contacts.CallLogsFragment
 import com.revis.ui.settings.SettingsViewModel
 import com.revis.ui.shared.BaseFragment
 import javax.inject.Inject
+import kotlin.random.Random
 
 class HomeFragment : BaseFragment() {
 
@@ -51,7 +52,7 @@ class HomeFragment : BaseFragment() {
             if (viewModel.isUserTechnician.value ?: false) {
                 text = getString(R.string.start_call_technician)
                 setOnClickListener {
-
+                    startCallTechnician()
                 }
             } else {
                 text = getString(R.string.start_call_operator)
@@ -74,8 +75,14 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun showStartCallTechnicianDialog() {
-
+    private fun startCallTechnician() {
+        val randomChannelId = Random.nextInt(100000, 1000000)
+        findNavController().navigate(
+            HomeFragmentDirections
+                .actionHomeFragmentToVideoCallActivity(
+                    randomChannelId.toString()
+                )
+        )
     }
 
     private fun showJoinCallOperatorDialog() {

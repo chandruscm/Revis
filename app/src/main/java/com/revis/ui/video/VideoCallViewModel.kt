@@ -21,14 +21,18 @@ class VideoCallViewModel @Inject constructor(
     private val gson: Gson
 ) : ViewModel() {
 
+    var channel: String = ""
+
     val cameraState = MutableLiveData(false)
     val videoState = MutableLiveData(false)
     val micState = MutableLiveData(false)
     val messagesState = MutableLiveData(false)
     val settingsState = MutableLiveData(false)
     val speakerState = MutableLiveData(true)
-    var currentVideoCallState = MutableLiveData(VIDEO_NORMAL)
-    var currentAnnotationState = MutableLiveData(ANNOTATION_CLEAR)
+    val currentVideoCallState = MutableLiveData(VIDEO_NORMAL)
+    val currentAnnotationState = MutableLiveData(ANNOTATION_CLEAR)
+
+    val remoteUserJoined = MutableLiveData(false)
 
     val pointerLocation = MutableLiveData(Position(0f, 0f))
 

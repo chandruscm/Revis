@@ -8,6 +8,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.revis.R
@@ -17,6 +18,7 @@ import com.revis.agora.BaseRtmClientListener
 import com.revis.databinding.ActivityVideoCallBinding
 import com.revis.ui.message.MessageChipAdapter
 import com.revis.ui.message.Position
+import com.revis.ui.settings.SettingsViewModel
 import com.revis.ui.shared.BaseActivity
 import com.revis.ui.video.VideoCallState.VIDEO_NORMAL
 import com.revis.ui.video.VideoCallState.VIDEO_ANNOTATION
@@ -37,6 +39,8 @@ import javax.inject.Inject
 class VideoCallActivity : BaseActivity() {
 
     private lateinit var binding: ActivityVideoCallBinding
+
+    private val args: VideoCallActivityArgs by navArgs()
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
@@ -77,10 +81,12 @@ class VideoCallActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.channel = args.channel
         binding = DataBindingUtil.setContentView(
             this, R.layout.activity_video_call
         )
         binding.viewModel = viewModel
+        binding.channel = args.channel
         binding.lifecycleOwner = this
         // Setting chronometer font via xml does not work for some reason!
         binding.callTimer.setTypeface(ResourcesCompat.getFont(this, R.font.red_hat))
@@ -185,6 +191,12 @@ class VideoCallActivity : BaseActivity() {
              */
             adapter.notifyDataSetChanged()
         })
+
+        viewModel.remoteUserJoined.observe(this, Observer { userJoined ->
+            if (userJoined) {
+                binding.parent.removeView(binding.waitingLayout.root)
+            }
+        })
     }
 
     private fun subscribePostPeekHeightMeasure() {
@@ -227,7 +239,7 @@ class VideoCallActivity : BaseActivity() {
 
     private fun joinChannel() {
         rtmChannel = rtmClient?.createChannel(
-            "remberg",
+            viewModel.channel,
             rtmChannelListener
         )
 
@@ -299,5 +311,6 @@ class VideoCallActivity : BaseActivity() {
         rtmClient?.logout(null)
         leaveAndReleaseChannel()
         rtmChannel = null
+        viewModel.remoteUserJoined.value = false
     }
 }

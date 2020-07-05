@@ -14,6 +14,8 @@ class SettingsViewModel @Inject constructor(
 
     val isUserTechnician = MutableLiveData(getUserRole())
 
+    fun isUserTechnician() = isUserTechnician.value ?: false
+
     fun setUserRole(technician: Boolean) = preferences.edit {
         putBoolean(PREF_USER_TECHNICIAN, technician)
         isUserTechnician.value = technician

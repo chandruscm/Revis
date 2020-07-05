@@ -22,6 +22,10 @@
     <string name="role_technician">Machine Servicing Technician</string>
     <string name="role_operator">Machine Operator</string>
 
+    <!-- Waiting Room -->
+    <string name="waiting_for_user">Waiting for user</string>
+    <string name="share_service_call_id">Share service call ID</string>
+
     <!-- Video Call -->
     <string name="pause_call">Pause</string>
     <string name="annotate">Annotate</string>
