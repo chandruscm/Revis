@@ -105,15 +105,15 @@
             />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_pause"
+            android:id="@+id/button_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:elevation="2dp"
             app:layout_anchor="@id/bottom_sheet"
             app:layout_anchorGravity="center_horizontal"
-            android:text="@string/pause_call"
-            app:icon="@drawable/ic_pause"
+            android:text="@string/annotate"
+            app:icon="@drawable/ic_pointer"
             style="@style/ExtendedFloatingButton"
             />
 

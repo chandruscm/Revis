@@ -33,7 +33,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_switch_camera"
             app:isSelected="@{viewModel.cameraState}"
-            android:onClick="@{() -> viewModel.toggleCamera()}"
+            android:onClick="@{() -> viewModel.toggleState(viewModel.cameraState)}"
             style="@style/CircleButtonActive"
             />
 
@@ -48,7 +48,7 @@
             app:layout_constraintTop_toTopOf="@+id/button_switch_camera"
             app:srcCompat="@drawable/ic_mic_off"
             app:isSelected="@{viewModel.micState}"
-            android:onClick="@{() -> viewModel.toggleMic()}"
+            android:onClick="@{() -> viewModel.toggleState(viewModel.micState)}"
             style="@style/CircleButton"
             />
 
@@ -63,7 +63,7 @@
             app:layout_constraintTop_toTopOf="@+id/button_mic_off"
             app:srcCompat="@drawable/ic_video_off"
             app:isSelected="@{viewModel.videoState}"
-            android:onClick="@{() -> viewModel.toggleVideo()}"
+            android:onClick="@{() -> viewModel.toggleState(viewModel.videoState)}"
             style="@style/CircleButton"
             />
 
@@ -78,7 +78,7 @@
             app:layout_constraintTop_toTopOf="@+id/button_video_off"
             app:srcCompat="@drawable/ic_messages"
             app:isSelected="@{viewModel.messagesState}"
-            android:onClick="@{() -> viewModel.toggleMessages()}"
+            android:onClick="@{() -> viewModel.toggleState(viewModel.messagesState)}"
             style="@style/CircleButton"
             />
 
@@ -93,8 +93,8 @@
             app:layout_constraintTop_toTopOf="@+id/button_messages"
             app:srcCompat="@drawable/ic_settings"
             app:isSelected="@{viewModel.settingsState}"
-            android:onClick="@{() -> viewModel.toggleSettings()}"
-            style="@style/CircleButtonActive"
+            android:onClick="@{() -> viewModel.enableSettings()}"
+            style="@style/CircleButton"
             />
 
         <View

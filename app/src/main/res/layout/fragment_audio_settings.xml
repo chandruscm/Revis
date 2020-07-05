@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:text="@string/settings_audio_speaker"
             android:checked="@{viewModel.speakerState}"
-            android:onClick="@{() -> viewModel.toggleSpeaker()}"
+            android:onClick="@{() -> viewModel.toggleState(viewModel.speakerState)}"
             style="@style/CheckBoxStyle"
             />
 

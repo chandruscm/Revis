@@ -2,7 +2,6 @@ package com.revis.ui.video
 
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
@@ -19,6 +18,11 @@ import com.revis.databinding.ActivityVideoCallBinding
 import com.revis.ui.message.MessageChipAdapter
 import com.revis.ui.message.Position
 import com.revis.ui.shared.BaseActivity
+import com.revis.ui.video.VideoCallState.VIDEO_NORMAL
+import com.revis.ui.video.VideoCallState.VIDEO_ANNOTATION
+import com.revis.ui.video.VideoCallState.VIDEO_PAUSED
+import com.revis.ui.video.AnnotationState.ANNOTATION_CLEAR
+import com.revis.ui.video.AnnotationState.ANNOTATION_POINTER
 import com.revis.utils.*
 import io.agora.rtm.SendMessageOptions
 import io.agora.rtm.RtmChannelMember
@@ -27,7 +31,6 @@ import io.agora.rtm.RtmClient
 import io.agora.rtm.ResultCallback
 import io.agora.rtm.ErrorInfo
 import io.agora.rtm.RtmStatusCode
-import kotlinx.android.synthetic.main.activity_video_call.*
 import java.util.UUID
 import javax.inject.Inject
 
@@ -81,6 +84,7 @@ class VideoCallActivity : BaseActivity() {
         binding.lifecycleOwner = this
         // Setting chronometer font via xml does not work for some reason!
         binding.callTimer.setTypeface(ResourcesCompat.getFont(this, R.font.red_hat))
+        viewModel.resetState()
 
         initAgora()
         initBottomSheet()
@@ -124,7 +128,7 @@ class VideoCallActivity : BaseActivity() {
                     }
                 }
             )
-            subscribeMessagesButton()
+            subscribePostPeekHeightMeasure()
         }
     }
 
@@ -145,8 +149,21 @@ class VideoCallActivity : BaseActivity() {
             }
         }
 
-        binding.buttonPause.setOnClickListener {
-            toggleFulleScreen()
+        binding.buttonFab.setOnClickListener {
+            with (viewModel) {
+                currentVideoCallState.apply {
+                    when (value!!) {
+                        VIDEO_NORMAL -> {
+                            value = VIDEO_ANNOTATION
+                            if (currentAnnotationState.value == ANNOTATION_CLEAR) {
+                                currentAnnotationState.value = ANNOTATION_POINTER
+                            }
+                        }
+                        VIDEO_ANNOTATION -> value = VIDEO_PAUSED
+                        VIDEO_PAUSED -> value = VIDEO_ANNOTATION
+                    }
+                }
+            }
         }
     }
 
@@ -162,7 +179,6 @@ class VideoCallActivity : BaseActivity() {
         }
 
         viewModel.messageList.observe(this, Observer { messages ->
-            Log.i("VideoCallActivity", messages.toString())
             adapter.submitList(messages)
             /**
              * Ideally you shouldn't have to call this. Unintended Behaviour.
@@ -171,12 +187,32 @@ class VideoCallActivity : BaseActivity() {
         })
     }
 
-    private fun subscribeMessagesButton() {
+    private fun subscribePostPeekHeightMeasure() {
         viewModel.messagesState.observe(this, Observer { enabled ->
             if (enabled) {
                 bottomSheetBehavior.expand()
             } else {
                 bottomSheetBehavior.collapse()
+            }
+        })
+
+        viewModel.currentVideoCallState.observe(this, Observer { state ->
+            with (binding.buttonFab) {
+                when (state) {
+                    VIDEO_NORMAL -> {
+                        disableFullScreen()
+                        setIconResource(R.drawable.ic_pointer)
+                        extend()
+                    }
+                    VIDEO_ANNOTATION -> {
+                        enableFullScreen()
+                        setIconResource(R.drawable.ic_pause)
+                        shrink()
+                    }
+                    VIDEO_PAUSED -> {
+                        setIconResource(R.drawable.ic_play)
+                    }
+                }
             }
         })
     }
@@ -237,14 +273,14 @@ class VideoCallActivity : BaseActivity() {
         )
     }
 
-    private fun toggleFulleScreen() {
-        if (bottomSheetBehavior.isHidden()) {
-            binding.appBarLayout.setExpanded(true, true)
-            bottomSheetBehavior.collapse()
-        } else {
-            binding.appBarLayout.setExpanded(false, true)
-            bottomSheetBehavior.hide()
-        }
+    private fun enableFullScreen() {
+        binding.appBarLayout.setExpanded(false, true)
+        bottomSheetBehavior.hide()
+    }
+
+    private fun disableFullScreen() {
+        binding.appBarLayout.setExpanded(true, true)
+        bottomSheetBehavior.collapse()
     }
 
     override fun onBackPressed() {

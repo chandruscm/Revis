@@ -13,6 +13,10 @@ import com.revis.R
 import com.revis.agora.BaseRtcEngine
 import com.revis.databinding.FragmentVideoCallBinding
 import com.revis.ui.shared.BaseFragment
+import com.revis.ui.video.VideoCallState.VIDEO_NORMAL
+import com.revis.ui.video.AnnotationState.ANNOTATION_CLEAR
+import com.revis.ui.video.AnnotationState.ANNOTATION_POINTER
+import com.revis.ui.video.AnnotationState.ANNOTATION_ARROW
 import com.revis.utils.*
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
@@ -67,6 +71,8 @@ class VideoCallFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentVideoCallBinding.inflate(layoutInflater)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
         return binding.root
     }
 
@@ -77,6 +83,7 @@ class VideoCallFragment : BaseFragment() {
         setupLocalVideo()
         joinChannel()
         setupAnnotation()
+        initListeners()
         subscribeUi()
         subscribeAnnotation()
     }
@@ -160,7 +167,15 @@ class VideoCallFragment : BaseFragment() {
                 val x = motionEvent.x
                 val y = motionEvent.y
                 when (motionEvent.action) {
-                    MotionEvent.ACTION_MOVE -> movePointer(x, y, false)
+                    MotionEvent.ACTION_MOVE -> {
+                        with (viewModel) {
+                            if (currentVideoCallState.value != VIDEO_NORMAL &&
+                                    currentAnnotationState.value == ANNOTATION_POINTER) {
+                                movePointer(x, y, false)
+
+                            }
+                        }
+                    }
                     MotionEvent.ACTION_UP -> {
                         /**
                          * Coordinates need to be scaled to account for the unique screen resolution.
@@ -175,6 +190,12 @@ class VideoCallFragment : BaseFragment() {
                 }
                 return@setOnTouchListener true
             }
+        }
+    }
+
+    private fun initListeners() {
+        binding.buttonClose.setOnClickListener {
+            viewModel.currentVideoCallState.value = VIDEO_NORMAL
         }
     }
 
@@ -201,10 +222,12 @@ class VideoCallFragment : BaseFragment() {
             }
         })
 
-        viewModel.settingsState.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(
-                R.id.action_videoCallFragment2_to_videoCallSettingsDialog
-            )
+        viewModel.settingsState.observe(viewLifecycleOwner, Observer { enabled ->
+            if (enabled) {
+                findNavController().navigate(
+                    R.id.action_videoCallFragment2_to_videoCallSettingsDialog
+                )
+            }
         })
 
         viewModel.videoQualitySetting.observe(viewLifecycleOwner, Observer { videoQualitySetting ->
@@ -217,6 +240,20 @@ class VideoCallFragment : BaseFragment() {
 
         viewModel.speakerState.observe(viewLifecycleOwner, Observer { enabled ->
             rtcEngine?.setEnableSpeakerphone(enabled)
+        })
+
+        viewModel.currentAnnotationState.observe(viewLifecycleOwner, Observer { annotationState ->
+            when (annotationState) {
+                ANNOTATION_POINTER -> {
+                    binding.pointer.makeVisible()
+                }
+                ANNOTATION_ARROW -> {
+                    binding.pointer.makeGone()
+                }
+                ANNOTATION_CLEAR -> {
+                    binding.pointer.makeGone()
+                }
+            }
         })
     }
 

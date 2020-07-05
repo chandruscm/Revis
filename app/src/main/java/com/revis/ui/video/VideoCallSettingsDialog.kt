@@ -1,5 +1,6 @@
 package com.revis.ui.video
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +10,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.revis.R
 import com.revis.databinding.DialogVideoCallSettingsBinding
 import com.revis.ui.shared.BaseDialogFragment
-import com.revis.ui.video.AudioSettingsFragment
-import com.revis.ui.video.VideoSettingsFragment
+import javax.inject.Inject
 
 class VideoCallSettingsDialog : BaseDialogFragment() {
 
     private lateinit var binding: DialogVideoCallSettingsBinding
+
+    @Inject
+    lateinit var viewModel: VideoCallViewModel
 
     private val adapter by lazy {
         VideoCallSettingsTabAdapter()
@@ -38,6 +41,11 @@ class VideoCallSettingsDialog : BaseDialogFragment() {
             }.attach()
         }
         return binding.root
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        viewModel.disableSettings()
     }
 
     inner class VideoCallSettingsTabAdapter : FragmentStateAdapter(this) {

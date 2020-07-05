@@ -7,6 +7,9 @@ import com.google.gson.Gson
 import com.revis.ui.message.Message
 import com.revis.ui.message.MessageChip
 import com.revis.ui.message.Position
+import com.revis.ui.video.VideoCallState.VIDEO_NORMAL
+import com.revis.ui.video.AnnotationState.ANNOTATION_CLEAR
+import com.revis.ui.video.AnnotationState.ANNOTATION_POINTER
 import com.revis.utils.VIDEO_QUALITY_HIGH
 import com.revis.utils.flipBoolean
 import com.revis.utils.notifyObserver
@@ -24,6 +27,8 @@ class VideoCallViewModel @Inject constructor(
     val messagesState = MutableLiveData(false)
     val settingsState = MutableLiveData(false)
     val speakerState = MutableLiveData(true)
+    var currentVideoCallState = MutableLiveData(VIDEO_NORMAL)
+    var currentAnnotationState = MutableLiveData(ANNOTATION_CLEAR)
 
     val pointerLocation = MutableLiveData(Position(0f, 0f))
 
@@ -67,21 +72,27 @@ class VideoCallViewModel @Inject constructor(
         }
     }
 
-    fun toggleCamera() = cameraState.flipBoolean()
+    fun resetState() {
+        currentVideoCallState.value = VIDEO_NORMAL
+    }
 
-    fun toggleVideo() = videoState.flipBoolean()
+    fun toggleState(state: MutableLiveData<Boolean>) = state.flipBoolean()
 
-    fun toggleMic() = micState.flipBoolean()
+    fun enableSettings() {
+        settingsState.value = true
+    }
 
-    fun toggleMessages() = messagesState.flipBoolean()
+    fun disableSettings() {
+        settingsState.value = false
+    }
 
-    fun toggleSettings() = settingsState.flipBoolean()
-
-    fun toggleSpeaker() = speakerState.flipBoolean()
+    fun setAnnotationState(state: AnnotationState) {
+        Log.i("Video", "Annotation set to ${state.name}")
+        currentAnnotationState.value = state
+    }
 
     fun setVideoQualitySetting(videoQualitySetting: Int) {
         this.videoQualitySetting.value = videoQualitySetting
-        Log.i("Video", "New video quality ${videoQualitySetting}")
     }
 
     fun movePointer(x: Float, y: Float) {
