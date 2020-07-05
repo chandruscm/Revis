@@ -48,8 +48,6 @@
             android:padding="@dimen/spacing_large"
             android:textColorHint="@color/colorPrimaryDark"
             app:boxStrokeColor="@color/colorPrimaryDark"
-            app:endIconMode="clear_text"
-            app:endIconTint="@color/greyDark"
             app:hintAnimationEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
