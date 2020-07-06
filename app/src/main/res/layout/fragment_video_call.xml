@@ -26,7 +26,7 @@
             />
 
         <ImageView
-            android:id="@+id/pointer"
+            android:id="@+id/localPointer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -36,6 +36,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
+
+        <ImageView
+            android:id="@+id/remotePointer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:src="@drawable/ic_pointer_large"
+            android:tint="@color/green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+        />
 
         <FrameLayout
             android:id="@+id/video_container_small"

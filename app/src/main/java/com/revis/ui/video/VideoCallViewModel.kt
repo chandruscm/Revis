@@ -9,7 +9,6 @@ import com.revis.ui.message.MessageChip
 import com.revis.ui.message.Position
 import com.revis.ui.video.VideoCallState.VIDEO_NORMAL
 import com.revis.ui.video.AnnotationState.ANNOTATION_CLEAR
-import com.revis.ui.video.AnnotationState.ANNOTATION_POINTER
 import com.revis.utils.VIDEO_QUALITY_HIGH
 import com.revis.utils.flipBoolean
 import com.revis.utils.notifyObserver
@@ -34,7 +33,8 @@ class VideoCallViewModel @Inject constructor(
 
     val remoteUserJoined = MutableLiveData(false)
 
-    val pointerLocation = MutableLiveData(Position(0f, 0f))
+    val localPointerLocation = MutableLiveData(Position(0f, 0f))
+    val remotePointerLocation = MutableLiveData(Position(0f, 0f))
 
     val messageList = MutableLiveData(arrayListOf<MessageChip>())
 
@@ -99,11 +99,11 @@ class VideoCallViewModel @Inject constructor(
         this.videoQualitySetting.value = videoQualitySetting
     }
 
-    fun movePointer(x: Float, y: Float) {
-        pointerLocation.value = Position(x, y)
+    fun setRemotePointerLocation(position: Position) {
+        remotePointerLocation.value = position
     }
 
-    fun movePointer(position: Position) {
-        pointerLocation.value = position
+    fun sendLocalPointerLocation(x: Float, y: Float) {
+        localPointerLocation.value = Position(x, y)
     }
 }

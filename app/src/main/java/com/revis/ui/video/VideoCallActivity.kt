@@ -18,7 +18,6 @@ import com.revis.agora.BaseRtmClientListener
 import com.revis.databinding.ActivityVideoCallBinding
 import com.revis.ui.message.MessageChipAdapter
 import com.revis.ui.message.Position
-import com.revis.ui.settings.SettingsViewModel
 import com.revis.ui.shared.BaseActivity
 import com.revis.ui.video.VideoCallState.VIDEO_NORMAL
 import com.revis.ui.video.VideoCallState.VIDEO_ANNOTATION
@@ -65,7 +64,7 @@ class VideoCallActivity : BaseActivity() {
 
         override fun onPointerMessageReceived(position: Position) {
             runOnUiThread {
-                viewModel.movePointer(position)
+                viewModel.setRemotePointerLocation(position)
             }
         }
 
@@ -174,15 +173,13 @@ class VideoCallActivity : BaseActivity() {
     }
 
     private fun subscribeUi() {
-        if (IS_TECHNICAN) {
-            viewModel.pointerLocation.observe(this, Observer { position ->
-                sendMessage(viewModel.createPointerMessage(position))
-            })
+        viewModel.localPointerLocation.observe(this, Observer { position ->
+            sendMessage(viewModel.createPointerMessage(position))
+        })
 
             //Todo: Debug
-            viewModel.videoState.value = false
-            binding.bottomSheet.buttonVideoOff.isEnabled = false
-        }
+//            viewModel.videoState.value = false
+//            binding.bottomSheet.buttonVideoOff.isEnabled = false
 
         viewModel.messageList.observe(this, Observer { messages ->
             adapter.submitList(messages)

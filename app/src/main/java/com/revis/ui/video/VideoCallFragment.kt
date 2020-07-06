@@ -12,9 +12,9 @@ import androidx.navigation.fragment.findNavController
 import com.revis.R
 import com.revis.agora.BaseRtcEngine
 import com.revis.databinding.FragmentVideoCallBinding
+import com.revis.ui.settings.SettingsViewModel
 import com.revis.ui.shared.BaseFragment
 import com.revis.ui.video.VideoCallState.VIDEO_NORMAL
-import com.revis.ui.video.AnnotationState.ANNOTATION_CLEAR
 import com.revis.ui.video.AnnotationState.ANNOTATION_POINTER
 import com.revis.ui.video.AnnotationState.ANNOTATION_ARROW
 import com.revis.utils.*
@@ -31,6 +31,9 @@ class VideoCallFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModel: VideoCallViewModel
+
+    @Inject
+    lateinit var settingsViewModel: SettingsViewModel
 
     private lateinit var localVideContainer: FrameLayout
     private lateinit var remoteVideoContainer: FrameLayout
@@ -161,34 +164,30 @@ class VideoCallFragment : BaseFragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupAnnotation() {
-        if (IS_TECHNICAN) {
-            remoteVideoContainer.setOnTouchListener { view, motionEvent ->
-                val x = motionEvent.x
-                val y = motionEvent.y
-                when (motionEvent.action) {
-                    MotionEvent.ACTION_MOVE -> {
-                        with (viewModel) {
-                            if (currentVideoCallState.value != VIDEO_NORMAL &&
-                                    currentAnnotationState.value == ANNOTATION_POINTER) {
-                                movePointer(x, y, false)
-
+        remoteVideoContainer.setOnTouchListener { view, motionEvent ->
+            val x = motionEvent.x
+            val y = motionEvent.y
+            with (viewModel) {
+                if (currentVideoCallState.value != VIDEO_NORMAL &&
+                    currentAnnotationState.value == ANNOTATION_POINTER
+                ) {
+                    when (motionEvent.action) {
+                        MotionEvent.ACTION_MOVE -> moveLocalPointer(x, y)
+                        MotionEvent.ACTION_UP -> {
+                            /**
+                             * Coordinates need to be scaled to account for the unique screen resolution.
+                             */
+                            with(displayMetrics()) {
+                                viewModel.sendLocalPointerLocation(
+                                    x / widthPixels,
+                                    y / heightPixels
+                                )
                             }
                         }
                     }
-                    MotionEvent.ACTION_UP -> {
-                        /**
-                         * Coordinates need to be scaled to account for the unique screen resolution.
-                         */
-                        with (displayMetrics()) {
-                            viewModel.movePointer(
-                                x / widthPixels,
-                                y / heightPixels
-                            )
-                        }
-                    }
                 }
-                return@setOnTouchListener true
             }
+            return@setOnTouchListener true
         }
     }
 
@@ -244,46 +243,47 @@ class VideoCallFragment : BaseFragment() {
         viewModel.currentAnnotationState.observe(viewLifecycleOwner, Observer { annotationState ->
             when (annotationState) {
                 ANNOTATION_POINTER -> {
-                    binding.pointer.makeVisible()
+                    binding.localPointer.makeVisible()
                 }
                 ANNOTATION_ARROW -> {
-                    binding.pointer.makeGone()
+                    binding.localPointer.makeGone()
                 }
                 else -> {
-                    binding.pointer.makeGone()
+                    binding.localPointer.makeGone()
                 }
             }
         })
     }
 
     private fun subscribeAnnotation() {
-        if (!IS_TECHNICAN) {
-            viewModel.pointerLocation.observe(viewLifecycleOwner, Observer { position ->
-                with (position) {
-                    movePointer(x, y, true)
+        viewModel.remotePointerLocation.observe(viewLifecycleOwner, Observer { position ->
+            with (position) {
+                if (x != 0f && y != 0f) {
+                    moveRemotePointer(x, y)
                 }
-            })
-        }
+            }
+        })
     }
 
-    private fun movePointer(x: Float, y: Float, scale: Boolean) {
+    private fun moveLocalPointer(x: Float, y: Float) {
+        binding.localPointer.x = x
+        binding.localPointer.y = y
+        binding.localPointer.makeVisible()
+    }
+
+    private fun moveRemotePointer(x: Float, y: Float) {
         /**
          * Coordinates need to be scaled to account for the unique screen resolution.
          */
-        val xScale: Int
-        val yScale: Int
         with (displayMetrics()) {
-            if (scale) {
-                xScale = widthPixels
-                yScale = heightPixels
-            } else {
-                xScale = 1
-                yScale = 1
-            }
+            binding.remotePointer.x = x * widthPixels
+            binding.remotePointer.y = y * heightPixels
+            binding.remotePointer.makeVisible()
         }
-        binding.pointer.x = x * xScale
-        binding.pointer.y = y * yScale
-        binding.pointer.makeVisible()
+    }
+
+    private fun clearRemoteAnnotation() {
+
     }
 
     override fun onDestroy() {
