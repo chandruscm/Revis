@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import com.revis.agora.BaseRtmChannelListener
 import com.revis.agora.BaseRtmClient
 import com.revis.agora.BaseRtmClientListener
 import com.revis.databinding.ActivityVideoCallBinding
+import com.revis.ui.message.MessageChip
 import com.revis.ui.message.MessageChipAdapter
 import com.revis.ui.message.Position
 import com.revis.ui.shared.BaseActivity
@@ -308,6 +310,21 @@ class VideoCallActivity : BaseActivity() {
         rtmClient?.logout(null)
         leaveAndReleaseChannel()
         rtmChannel = null
+
+        //Todo: Scope viewModel to activity
         viewModel.remoteUserJoined.value = false
+        viewModel.cameraState.value = false
+        viewModel.videoState.value = false
+        viewModel.micState.value = false
+        viewModel.messagesState.value = false
+        viewModel.settingsState.value = false
+        viewModel.speakerState.value = true
+        viewModel.currentVideoCallState.value = VIDEO_NORMAL
+        viewModel.currentAnnotationState.value = ANNOTATION_CLEAR
+        viewModel.remoteUserJoined.value = false
+        viewModel.localPointerLocation.value = Position(0f, 0f)
+        viewModel.remotePointerLocation.value = Position(0f, 0f)
+        viewModel.messageList.value = arrayListOf<MessageChip>()
+        viewModel.videoQualitySetting.value = VIDEO_QUALITY_HIGH
     }
 }
