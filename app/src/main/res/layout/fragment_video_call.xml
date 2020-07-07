@@ -13,15 +13,20 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:keepScreenOn="true">
 
         <FrameLayout
             android:id="@+id/video_container_big"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/holo_blue_bright" />
+            android:background="@android:color/holo_blue_bright"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp"
+            />
 
         <ImageView
             android:id="@+id/local_pointer"
@@ -86,13 +91,15 @@
             android:src="@drawable/arrow_3_remote"
             android:visibility="gone" />
 
-        <FrameLayout
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/video_container_small"
-            android:layout_width="160dp"
-            android:layout_height="240dp"
-            android:background="@android:color/holo_orange_dark"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="120dp"
+            android:layout_height="180dp"
+            android:layout_marginStart="@dimen/spacing_tiny"
+            app:cardElevation="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <View
             android:id="@+id/button_fab_placeholder"
@@ -108,55 +115,52 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_undo"
-            style="@style/UnelevatedSolidButtonStyle.Whitecircular"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/spacing_smaller"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
             android:onClick="@{() -> viewModel.setAnnotationState(AnnotationState.ANNOTATION_CLEAR)}"
             android:text="@string/clear"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_close"
-            style="@style/UnelevatedExtendedFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/back"
-            android:textSize="@dimen/font_medium"
-            app:icon="@drawable/ic_up"
+            app:icon="@drawable/ic_delete"
             app:layout_constraintBottom_toBottomOf="@+id/button_fab_placeholder"
-            app:layout_constraintEnd_toStartOf="@id/button_fab_placeholder"
+            app:layout_constraintEnd_toStartOf="@+id/button_fab_placeholder"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button_fab_placeholder" />
+            app:layout_constraintTop_toTopOf="@+id/button_fab_placeholder"
+            style="@style/UnelevatedSolidButtonStyle.White"
+            />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <ImageButton
             android:id="@+id/button_pointer"
-            style="@style/UnelevatedExtendedFab"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:text="@string/pointer"
-            app:icon="@drawable/ic_pointer"
-            android:onClick="@{() -> viewModel.setAnnotationState(AnnotationState.ANNOTATION_ARROW)}"
-            app:layout_constraintBottom_toBottomOf="@id/button_fab_placeholder"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button_fab_placeholder"
-            app:layout_constraintTop_toTopOf="@+id/button_fab_placeholder" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_arrow"
-            style="@style/UnelevatedExtendedFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="@string/arrows"
-            app:icon="@drawable/ic_down"
+            app:isSelected="@{viewModel.currentAnnotationState == AnnotationState.ANNOTATION_POINTER}"
             android:onClick="@{() -> viewModel.setAnnotationState(AnnotationState.ANNOTATION_POINTER)}"
-            app:layout_constraintBottom_toBottomOf="@+id/button_fab_placeholder"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/pointer"
+            android:src="@drawable/ic_pointer"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintBottom_toBottomOf="@id/button_fab_placeholder"
             app:layout_constraintStart_toEndOf="@+id/button_fab_placeholder"
-            app:layout_constraintTop_toTopOf="@+id/button_fab_placeholder" />
+            app:layout_constraintEnd_toStartOf="@id/button_arrow"
+            app:layout_constraintTop_toTopOf="@+id/button_fab_placeholder"
+            style="@style/CircleButton"
+            />
+
+        <ImageButton
+            android:id="@+id/button_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/arrows"
+            android:src="@drawable/ic_down"
+            app:isSelected="@{viewModel.currentAnnotationState == AnnotationState.ANNOTATION_ARROW}"
+            android:onClick="@{() -> viewModel.setAnnotationState(AnnotationState.ANNOTATION_ARROW)}"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintBottom_toBottomOf="@+id/button_pointer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/button_pointer"
+            app:layout_constraintTop_toTopOf="@+id/button_pointer"
+            style="@style/CircleButton"
+            />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"

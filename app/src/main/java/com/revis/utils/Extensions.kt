@@ -25,6 +25,13 @@ fun View.makeVisible() {
 }
 
 /**
+ * Setting a view's visibility to visible
+ */
+fun View.makeInvisible() {
+    visibility = View.INVISIBLE
+}
+
+/**
  * Show a toast message from a fragment
  */
 fun Fragment.showToast(message: String) {

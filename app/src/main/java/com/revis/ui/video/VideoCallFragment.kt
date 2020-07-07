@@ -3,13 +3,14 @@ package com.revis.ui.video
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.FrameLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.updateMargins
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.transition.Slide
+import androidx.transition.TransitionManager
 import com.revis.R
 import com.revis.agora.BaseRtcEngine
 import com.revis.databinding.FragmentVideoCallBinding
@@ -18,8 +19,6 @@ import com.revis.ui.shared.BaseFragment
 import com.revis.ui.video.VideoCallMode.VIDEO_NORMAL
 import com.revis.ui.video.AnnotationState.ANNOTATION_POINTER
 import com.revis.ui.video.AnnotationState.ANNOTATION_ARROW
-import com.revis.ui.video.VideoCallState.VIDEO_PAUSED
-import com.revis.ui.video.VideoCallState.VIDEO_RESUMED
 import com.revis.utils.*
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
@@ -102,14 +101,12 @@ class VideoCallFragment : BaseFragment() {
     private fun initAgora() {
         rtcEngine = rtcEngineFactory.create(rtcEventHandler)
 
-        if (IS_TECHNICAN) {
+        if (settingsViewModel.isUserTechnician.value ?: false) {
             localVideContainer = binding.videoContainerSmall
             remoteVideoContainer = binding.videoContainerBig
-            localVideContainer.makeGone()
         } else {
             localVideContainer = binding.videoContainerBig
             remoteVideoContainer = binding.videoContainerSmall
-            remoteVideoContainer.makeGone()
         }
     }
 
@@ -122,11 +119,14 @@ class VideoCallFragment : BaseFragment() {
         // handler callback function (onJoinChannelSuccess) after
         // joining the channel successfully.
         val surfaceView = RtcEngine.CreateRendererView(requireContext())
-        surfaceView.setZOrderMediaOverlay(true)
+        if (settingsViewModel.isUserTechnician.value ?: false) {
+            surfaceView.setZOrderMediaOverlay(true)
+        }
         localVideContainer.addView(surfaceView)
         // Initializes the local video view.
         // RENDER_MODE_FIT: Uniformly scale the video until one of its dimension fits the boundary. Areas that are not filled due to the disparity in the aspect ratio are filled with black. 
         rtcEngine?.setupLocalVideo(VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FILL, 0))
+        rtcEngine?.switchCamera()
     }
 
     /**
@@ -161,6 +161,9 @@ class VideoCallFragment : BaseFragment() {
           calling SurfaceView.
          */
         val surfaceView = RtcEngine.CreateRendererView(requireContext())
+        if (!(settingsViewModel.isUserTechnician.value ?: false)) {
+            surfaceView.setZOrderMediaOverlay(true)
+        }
         remoteVideoContainer.addView(surfaceView)
         // Initializes the video view of a remote user.
         rtcEngine?.setupRemoteVideo(VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FILL, uid))
@@ -174,7 +177,7 @@ class VideoCallFragment : BaseFragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupAnnotation() {
-        remoteVideoContainer.setOnTouchListener { view, motionEvent ->
+        binding.videoContainerBig.setOnTouchListener { view, motionEvent ->
             val x = motionEvent.x
             val y = motionEvent.y
             with (viewModel) {
@@ -216,24 +219,23 @@ class VideoCallFragment : BaseFragment() {
     }
 
     private fun initListeners() {
-        binding.buttonClose.setOnClickListener {
-            viewModel.currentVideoCallMode.value = VIDEO_NORMAL
-        }
-
         binding.buttonPointer.setOnClickListener {
             viewModel.currentAnnotationState.value = ANNOTATION_ARROW
-            binding.buttonPointer.makeGone()
-            binding.buttonArrow.makeVisible()
         }
 
         binding.buttonArrow.setOnClickListener {
             viewModel.currentAnnotationState.value = ANNOTATION_POINTER
-            binding.buttonArrow.makeGone()
-            binding.buttonPointer.makeVisible()
         }
     }
 
     private fun subscribeUi() {
+        viewModel.actionBarHeight.observe(viewLifecycleOwner, Observer { height ->
+            Log.i("video", "app bar height ${height}")
+            (localVideContainer.layoutParams as ViewGroup.MarginLayoutParams).apply {
+                updateMargins(top = (viewModel.actionBarHeight.value ?: 0) + resources.getDimensionPixelSize(R.dimen.spacing_tiny))
+            }
+        })
+
         viewModel.cameraState.observe(viewLifecycleOwner, Observer {
             rtcEngine?.switchCamera()
         })
@@ -281,15 +283,11 @@ class VideoCallFragment : BaseFragment() {
             when (annotationState) {
                 ANNOTATION_POINTER -> {
                     Log.i("Video", "Making local pointer visible")
-                    binding.buttonPointer.makeVisible()
-                    binding.buttonArrow.makeGone()
                     clearLocalArrow()
                     showLocalPointer()
                 }
                 ANNOTATION_ARROW -> {
                     Log.i("Video", "Clearing local pointer and arrow")
-                    binding.buttonArrow.makeVisible()
-                    binding.buttonPointer.makeGone()
                     clearLocalPointer()
                 }
                 else -> {
@@ -299,14 +297,17 @@ class VideoCallFragment : BaseFragment() {
             }
         })
 
-        viewModel.pauseState.observe(viewLifecycleOwner, Observer { videoCallState ->
-            if (videoCallState == VIDEO_PAUSED) {
-                Log.i("Video", "Video has been paused")
-                rtcEngine?.disableVideo()
-            } else {
-                Log.i("Video", "Video has been resumed")
-                rtcEngine?.enableVideo()
+        viewModel.currentVideoCallMode.observe(viewLifecycleOwner, Observer { videoMode ->
+            TransitionManager.beginDelayedTransition(binding.parent, Slide(Gravity.START))
+            when (videoMode) {
+                VIDEO_NORMAL -> {
+                    rtcEngine?.enableVideo()
+                }
+                else -> {
+                    rtcEngine?.disableVideo()
+                }
             }
+            Log.i("Video", "Visibility set to ${binding.videoContainerSmall.visibility}")
         })
     }
 

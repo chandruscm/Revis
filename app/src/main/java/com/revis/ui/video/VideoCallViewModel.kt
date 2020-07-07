@@ -8,9 +8,8 @@ import com.revis.ui.message.Message
 import com.revis.ui.message.MessageChip
 import com.revis.ui.message.Position
 import com.revis.ui.video.VideoCallMode.VIDEO_NORMAL
-import com.revis.ui.video.VideoCallState.VIDEO_RESUMED
-import com.revis.ui.video.VideoCallState.VIDEO_PAUSED
 import com.revis.ui.video.AnnotationState.ANNOTATION_CLEAR
+import com.revis.ui.video.VideoCallMode.VIDEO_PAUSED
 import com.revis.utils.VIDEO_QUALITY_HIGH
 import com.revis.utils.flipBoolean
 import com.revis.utils.notifyObserver
@@ -48,7 +47,7 @@ class VideoCallViewModel @Inject constructor(
 
     val videoQualitySetting = MutableLiveData(VIDEO_QUALITY_HIGH)
 
-    val pauseState = MutableLiveData(VIDEO_RESUMED)
+    val actionBarHeight = MutableLiveData(0)
 
     init {
 //        messageList.value = getSampleMessages()
@@ -147,10 +146,10 @@ class VideoCallViewModel @Inject constructor(
     }
 
     fun pauseVideo() {
-        pauseState.value = VIDEO_PAUSED
+        currentVideoCallMode.value = VIDEO_PAUSED
     }
 
     fun resumeVideo() {
-        pauseState.value = VIDEO_RESUMED
+        currentVideoCallMode.value = VIDEO_NORMAL
     }
 }
