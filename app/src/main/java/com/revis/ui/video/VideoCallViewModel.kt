@@ -7,7 +7,9 @@ import com.google.gson.Gson
 import com.revis.ui.message.Message
 import com.revis.ui.message.MessageChip
 import com.revis.ui.message.Position
-import com.revis.ui.video.VideoCallState.VIDEO_NORMAL
+import com.revis.ui.video.VideoCallMode.VIDEO_NORMAL
+import com.revis.ui.video.VideoCallState.VIDEO_RESUMED
+import com.revis.ui.video.VideoCallState.VIDEO_PAUSED
 import com.revis.ui.video.AnnotationState.ANNOTATION_CLEAR
 import com.revis.utils.VIDEO_QUALITY_HIGH
 import com.revis.utils.flipBoolean
@@ -28,7 +30,7 @@ class VideoCallViewModel @Inject constructor(
     val messagesState = MutableLiveData(false)
     val settingsState = MutableLiveData(false)
     val speakerState = MutableLiveData(true)
-    val currentVideoCallState = MutableLiveData(VIDEO_NORMAL)
+    val currentVideoCallMode = MutableLiveData(VIDEO_NORMAL)
     val currentAnnotationState = MutableLiveData(ANNOTATION_CLEAR)
 
     val remoteUserJoined = MutableLiveData(false)
@@ -45,6 +47,8 @@ class VideoCallViewModel @Inject constructor(
     val messageList = MutableLiveData(arrayListOf<MessageChip>())
 
     val videoQualitySetting = MutableLiveData(VIDEO_QUALITY_HIGH)
+
+    val pauseState = MutableLiveData(VIDEO_RESUMED)
 
     init {
 //        messageList.value = getSampleMessages()
@@ -95,7 +99,7 @@ class VideoCallViewModel @Inject constructor(
     }
 
     fun resetState() {
-        currentVideoCallState.value = VIDEO_NORMAL
+        currentVideoCallMode.value = VIDEO_NORMAL
     }
 
     fun toggleState(state: MutableLiveData<Boolean>) = state.flipBoolean()
@@ -140,5 +144,13 @@ class VideoCallViewModel @Inject constructor(
 
     fun clearRemoteAnnotation() {
         remoteAnnotationClear.flipBoolean()
+    }
+
+    fun pauseVideo() {
+        pauseState.value = VIDEO_PAUSED
+    }
+
+    fun resumeVideo() {
+        pauseState.value = VIDEO_RESUMED
     }
 }

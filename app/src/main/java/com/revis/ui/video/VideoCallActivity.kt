@@ -8,7 +8,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,9 +21,10 @@ import com.revis.ui.message.MessageChip
 import com.revis.ui.message.MessageChipAdapter
 import com.revis.ui.message.Position
 import com.revis.ui.shared.BaseActivity
-import com.revis.ui.video.VideoCallState.VIDEO_NORMAL
-import com.revis.ui.video.VideoCallState.VIDEO_ANNOTATION
+import com.revis.ui.video.VideoCallMode.VIDEO_NORMAL
+import com.revis.ui.video.VideoCallMode.VIDEO_ANNOTATION
 import com.revis.ui.video.VideoCallState.VIDEO_PAUSED
+import com.revis.ui.video.VideoCallState.VIDEO_RESUMED
 import com.revis.ui.video.AnnotationState.ANNOTATION_CLEAR
 import com.revis.ui.video.AnnotationState.ANNOTATION_POINTER
 import com.revis.utils.*
@@ -80,6 +80,20 @@ class VideoCallActivity : BaseActivity() {
         override fun onClearMessageReceived() {
             runOnUiThread {
                 viewModel.clearRemoteAnnotation()
+            }
+        }
+
+        override fun onPauseMessageReceived() {
+            runOnUiThread {
+                Log.i("Video", "Pause message received")
+                viewModel.pauseVideo()
+            }
+        }
+
+        override fun onResumeMessageReceived() {
+            runOnUiThread {
+                Log.i("Video", "Resume message received")
+                viewModel.resumeVideo()
             }
         }
     }
@@ -167,7 +181,7 @@ class VideoCallActivity : BaseActivity() {
 
         binding.buttonFab.setOnClickListener {
             with (viewModel) {
-                currentVideoCallState.apply {
+                currentVideoCallMode.apply {
                     when (value!!) {
                         VIDEO_NORMAL -> {
                             value = VIDEO_ANNOTATION
@@ -177,12 +191,13 @@ class VideoCallActivity : BaseActivity() {
                             }
                         }
                         VIDEO_ANNOTATION -> {
-                            value = VIDEO_PAUSED
-                            sendMessage(viewModel.createPauseMessage())
-                        }
-                        VIDEO_PAUSED -> {
-                            value = VIDEO_ANNOTATION
-                            sendMessage(viewModel.createResumeMessage())
+                            if (viewModel.pauseState.value == VIDEO_PAUSED) {
+                                viewModel.pauseState.value = VIDEO_RESUMED
+                                sendMessage(viewModel.createResumeMessage())
+                            } else {
+                                viewModel.pauseState.value = VIDEO_PAUSED
+                                sendMessage(viewModel.createPauseMessage())
+                            }
                         }
                     }
                 }
@@ -232,7 +247,7 @@ class VideoCallActivity : BaseActivity() {
             }
         })
 
-        viewModel.currentVideoCallState.observe(this, Observer { state ->
+        viewModel.currentVideoCallMode.observe(this, Observer { state ->
             with (binding.buttonFab) {
                 when (state) {
                     VIDEO_NORMAL -> {
@@ -242,12 +257,23 @@ class VideoCallActivity : BaseActivity() {
                     }
                     VIDEO_ANNOTATION -> {
                         enableFullScreen()
-                        setIconResource(R.drawable.ic_pause)
+                        if (viewModel.pauseState.value == VIDEO_PAUSED) {
+                            setIconResource(R.drawable.ic_play)
+                        } else {
+                            setIconResource(R.drawable.ic_pause)
+                        }
                         shrink()
                     }
-                    VIDEO_PAUSED -> {
-                        setIconResource(R.drawable.ic_play)
-                    }
+                }
+            }
+        })
+
+        viewModel.pauseState.observe(this, Observer { state ->
+            if (viewModel.currentVideoCallMode.value == VIDEO_ANNOTATION) {
+                if (state == VIDEO_PAUSED) {
+                    binding.buttonFab.setIconResource(R.drawable.ic_play)
+                } else {
+                    binding.buttonFab.setIconResource(R.drawable.ic_pause)
                 }
             }
         })
@@ -344,12 +370,13 @@ class VideoCallActivity : BaseActivity() {
         viewModel.messagesState.value = false
         viewModel.settingsState.value = false
         viewModel.speakerState.value = true
-        viewModel.currentVideoCallState.value = VIDEO_NORMAL
+        viewModel.currentVideoCallMode.value = VIDEO_NORMAL
         viewModel.currentAnnotationState.value = ANNOTATION_CLEAR
         viewModel.remoteUserJoined.value = false
         viewModel.localPointerLocation.value = Position(0f, 0f)
         viewModel.remotePointerLocation.value = Position(0f, 0f)
         viewModel.messageList.value = arrayListOf<MessageChip>()
         viewModel.videoQualitySetting.value = VIDEO_QUALITY_HIGH
+        viewModel.pauseState.value = VIDEO_RESUMED
     }
 }

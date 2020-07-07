@@ -8,7 +8,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.revis.R
@@ -16,10 +15,11 @@ import com.revis.agora.BaseRtcEngine
 import com.revis.databinding.FragmentVideoCallBinding
 import com.revis.ui.settings.SettingsViewModel
 import com.revis.ui.shared.BaseFragment
-import com.revis.ui.video.VideoCallState.VIDEO_NORMAL
+import com.revis.ui.video.VideoCallMode.VIDEO_NORMAL
 import com.revis.ui.video.AnnotationState.ANNOTATION_POINTER
 import com.revis.ui.video.AnnotationState.ANNOTATION_ARROW
 import com.revis.ui.video.VideoCallState.VIDEO_PAUSED
+import com.revis.ui.video.VideoCallState.VIDEO_RESUMED
 import com.revis.utils.*
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
@@ -178,7 +178,7 @@ class VideoCallFragment : BaseFragment() {
             val x = motionEvent.x
             val y = motionEvent.y
             with (viewModel) {
-                if (currentVideoCallState.value != VIDEO_NORMAL) {
+                if (currentVideoCallMode.value != VIDEO_NORMAL) {
                     when (motionEvent.action) {
                         MotionEvent.ACTION_MOVE -> {
                             if (currentAnnotationState.value == ANNOTATION_POINTER) {
@@ -217,7 +217,7 @@ class VideoCallFragment : BaseFragment() {
 
     private fun initListeners() {
         binding.buttonClose.setOnClickListener {
-            viewModel.currentVideoCallState.value = VIDEO_NORMAL
+            viewModel.currentVideoCallMode.value = VIDEO_NORMAL
         }
 
         binding.buttonPointer.setOnClickListener {
@@ -276,14 +276,6 @@ class VideoCallFragment : BaseFragment() {
             rtcEngine?.setEnableSpeakerphone(enabled)
         })
 
-        viewModel.currentVideoCallState.observe(viewLifecycleOwner, Observer { videoCallState ->
-            when (videoCallState) {
-                VIDEO_PAUSED -> {
-
-                }
-            }
-        })
-
         viewModel.currentAnnotationState.observe(viewLifecycleOwner, Observer { annotationState ->
             viewModel.sendLocalAnnotationClear()
             when (annotationState) {
@@ -304,6 +296,16 @@ class VideoCallFragment : BaseFragment() {
                     clearLocalPointer()
                     clearLocalArrow()
                 }
+            }
+        })
+
+        viewModel.pauseState.observe(viewLifecycleOwner, Observer { videoCallState ->
+            if (videoCallState == VIDEO_PAUSED) {
+                Log.i("Video", "Video has been paused")
+                rtcEngine?.disableVideo()
+            } else {
+                Log.i("Video", "Video has been resumed")
+                rtcEngine?.enableVideo()
             }
         })
     }
