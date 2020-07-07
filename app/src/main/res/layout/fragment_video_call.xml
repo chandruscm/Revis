@@ -32,7 +32,6 @@
             android:id="@+id/local_pointer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:src="@drawable/ic_pointer_large"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,8 +45,12 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_pointer_large"
             android:tint="@color/green"
-            android:visibility="gone"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.85"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.13999999" />
 
         <ImageView
             android:id="@+id/local_arrow_1"
@@ -91,12 +94,11 @@
             android:src="@drawable/arrow_3_remote"
             android:visibility="gone" />
 
-        <com.google.android.material.card.MaterialCardView
+        <FrameLayout
             android:id="@+id/video_container_small"
             android:layout_width="120dp"
             android:layout_height="180dp"
             android:layout_marginStart="@dimen/spacing_tiny"
-            app:cardElevation="6dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
@@ -161,6 +163,27 @@
             app:layout_constraintTop_toTopOf="@+id/button_pointer"
             style="@style/CircleButton"
             />
+
+        <FrameLayout
+            android:id="@+id/layout_video_off"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_video_off_large"
+                android:tint="@color/greyLight"
+                />
+
+        </FrameLayout>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"

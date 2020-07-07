@@ -43,6 +43,8 @@ class VideoCallViewModel @Inject constructor(
     val remoteAnnotationClear = MutableLiveData(true)
     val localAnnotationClear = MutableLiveData(true)
 
+    val remoteVideoDisabled = MutableLiveData(false)
+
     val messageList = MutableLiveData(arrayListOf<MessageChip>())
 
     val videoQualitySetting = MutableLiveData(VIDEO_QUALITY_HIGH)

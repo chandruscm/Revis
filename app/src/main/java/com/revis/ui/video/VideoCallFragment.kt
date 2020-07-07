@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.updateMargins
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.transition.Fade
 import androidx.transition.Slide
 import androidx.transition.TransitionManager
 import com.revis.R
@@ -20,8 +21,11 @@ import com.revis.ui.video.VideoCallMode.VIDEO_NORMAL
 import com.revis.ui.video.AnnotationState.ANNOTATION_POINTER
 import com.revis.ui.video.AnnotationState.ANNOTATION_ARROW
 import com.revis.utils.*
+import io.agora.rtc.Constants.*
 import io.agora.rtc.IRtcEngineEventHandler
+import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
+import io.agora.rtc.internal.RtcEngineEvent
 import io.agora.rtc.video.VideoCanvas
 import io.agora.rtc.video.VideoEncoderConfiguration
 import javax.inject.Inject
@@ -38,7 +42,9 @@ class VideoCallFragment : BaseFragment() {
     lateinit var settingsViewModel: SettingsViewModel
 
     private lateinit var localVideContainer: FrameLayout
+    private lateinit var localSurfaceView: SurfaceView
     private lateinit var remoteVideoContainer: FrameLayout
+    private lateinit var remoteSurfaceView: SurfaceView
 
     @Inject
     lateinit var rtcEngineFactory : BaseRtcEngine.Factory
@@ -63,6 +69,23 @@ class VideoCallFragment : BaseFragment() {
 
         override fun onUserOffline(uid: Int, reason: Int) {
             requireActivity().runOnUiThread { onRemoteUserLeft() }
+        }
+
+        override fun onRemoteVideoStateChanged(uid: Int, state: Int, reason: Int, elapsed: Int) {
+            requireActivity().runOnUiThread {
+                if (viewModel.currentVideoCallMode.value ?: false == VIDEO_NORMAL) {
+                    Log.i("Video", "State : $state Reason $reason")
+                    if (state == REMOTE_VIDEO_STATE_STOPPED &&
+                        reason == REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED
+                    ) {
+                        removeRemoteContainer()
+                    } else if (state == REMOTE_VIDEO_STATE_DECODING &&
+                        reason == REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED
+                    ) {
+                        showRemoteContainer()
+                    }
+                }
+            }
         }
     }
 
@@ -118,14 +141,14 @@ class VideoCallFragment : BaseFragment() {
         // Our server will assign one and return the uid via the event
         // handler callback function (onJoinChannelSuccess) after
         // joining the channel successfully.
-        val surfaceView = RtcEngine.CreateRendererView(requireContext())
+        localSurfaceView = RtcEngine.CreateRendererView(requireContext())
         if (settingsViewModel.isUserTechnician.value ?: false) {
-            surfaceView.setZOrderMediaOverlay(true)
+            localSurfaceView.setZOrderMediaOverlay(true)
         }
-        localVideContainer.addView(surfaceView)
+        localVideContainer.addView(localSurfaceView)
         // Initializes the local video view.
         // RENDER_MODE_FIT: Uniformly scale the video until one of its dimension fits the boundary. Areas that are not filled due to the disparity in the aspect ratio are filled with black. 
-        rtcEngine?.setupLocalVideo(VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FILL, 0))
+        rtcEngine?.setupLocalVideo(VideoCanvas(localSurfaceView, VideoCanvas.RENDER_MODE_FILL, 0))
         rtcEngine?.switchCamera()
     }
 
@@ -160,15 +183,55 @@ class VideoCallFragment : BaseFragment() {
           The video display view must be created using this method instead of directly
           calling SurfaceView.
          */
-        val surfaceView = RtcEngine.CreateRendererView(requireContext())
+        remoteSurfaceView = RtcEngine.CreateRendererView(requireContext())
         if (!(settingsViewModel.isUserTechnician.value ?: false)) {
-            surfaceView.setZOrderMediaOverlay(true)
+            remoteSurfaceView.setZOrderMediaOverlay(true)
         }
-        remoteVideoContainer.addView(surfaceView)
+        remoteVideoContainer.addView(remoteSurfaceView)
         // Initializes the video view of a remote user.
-        rtcEngine?.setupRemoteVideo(VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FILL, uid))
-        surfaceView.tag = uid // for mark purpose
+        rtcEngine?.setupRemoteVideo(VideoCanvas(remoteSurfaceView, VideoCanvas.RENDER_MODE_FILL, uid))
+        remoteSurfaceView.tag = uid // for mark purpose
         viewModel.remoteUserJoined.value = true
+    }
+
+    private fun showRemoteContainer() {
+        if (settingsViewModel.isUserTechnician.value ?: false) {
+            binding.layoutVideoOff.makeGone()
+        } else {
+            binding.videoContainerSmall.makeVisible()
+            if (this::remoteSurfaceView.isInitialized) {
+                remoteSurfaceView.makeVisible()
+            }
+        }
+    }
+
+    private fun removeRemoteContainer() {
+        if (settingsViewModel.isUserTechnician.value ?: false) {
+            binding.layoutVideoOff.makeVisible()
+        } else {
+            binding.videoContainerSmall.makeInvisible()
+            remoteSurfaceView.makeInvisible()
+        }
+    }
+
+    private fun showLocalContainer() {
+        if (settingsViewModel.isUserTechnician.value ?: false) {
+            binding.videoContainerSmall.makeVisible()
+            if (this::localSurfaceView.isInitialized) {
+                localSurfaceView.makeVisible()
+            }
+        } else {
+            binding.layoutVideoOff.makeGone()
+        }
+    }
+
+    private fun removeLocalContainer() {
+        if (settingsViewModel.isUserTechnician.value ?: false) {
+            binding.videoContainerSmall.makeInvisible()
+            localSurfaceView.makeInvisible()
+        } else {
+            binding.layoutVideoOff.makeVisible()
+        }
     }
 
     private fun onRemoteUserLeft() {
@@ -181,34 +244,39 @@ class VideoCallFragment : BaseFragment() {
             val x = motionEvent.x
             val y = motionEvent.y
             with (viewModel) {
-                if (currentVideoCallMode.value != VIDEO_NORMAL) {
-                    when (motionEvent.action) {
-                        MotionEvent.ACTION_MOVE -> {
-                            if (currentAnnotationState.value == ANNOTATION_POINTER) {
-                                moveLocalPointer(x, y)
-                            }
+                when (motionEvent.action) {
+                    MotionEvent.ACTION_MOVE -> {
+                        if ((currentAnnotationState.value == ANNOTATION_POINTER) ||
+                                (currentVideoCallMode.value == VIDEO_NORMAL)){
+                            moveLocalPointer(x, y, false)
                         }
-                        MotionEvent.ACTION_UP -> {
-                            with(displayMetrics()) {
-                                Log.i("Video", "First action up")
-                                if (currentAnnotationState.value == ANNOTATION_POINTER) {
-                                    /**
-                                     * Coordinates need to be scaled to account for the unique screen resolution.
-                                     */
-                                    with(displayMetrics()) {
-                                        viewModel.sendLocalPointerLocation(
-                                            x / widthPixels,
-                                            y / heightPixels
-                                        )
-                                    }
-                                } else if (currentAnnotationState.value == ANNOTATION_ARROW) {
-                                    Log.i("Video", "x:$x y:$y")
-                                    addNewLocalArrow(x, y)
-                                    viewModel.sendLocalArrowLocation(
-                                        x / widthPixels,
-                                        y / heightPixels
-                                    )
-                                }
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        with(displayMetrics()) {
+                            Log.i("Video", "First action up")
+                            if (currentVideoCallMode.value == VIDEO_NORMAL) {
+                                Log.i("Video", "send local pointer location $x $y")
+                                moveLocalPointer(x, y, true)
+                                viewModel.sendLocalPointerLocation(
+                                    x / widthPixels,
+                                    y / heightPixels
+                                )
+                            }
+                            if (currentAnnotationState.value == ANNOTATION_POINTER) {
+                                /**
+                                 * Coordinates need to be scaled to account for the unique screen resolution.
+                                 */
+                                viewModel.sendLocalPointerLocation(
+                                    x / widthPixels,
+                                    y / heightPixels
+                                )
+                            } else if (currentAnnotationState.value == ANNOTATION_ARROW) {
+                                Log.i("Video", "x:$x y:$y")
+                                addNewLocalArrow(x, y)
+                                viewModel.sendLocalArrowLocation(
+                                    x / widthPixels,
+                                    y / heightPixels
+                                )
                             }
                         }
                     }
@@ -231,7 +299,7 @@ class VideoCallFragment : BaseFragment() {
     private fun subscribeUi() {
         viewModel.actionBarHeight.observe(viewLifecycleOwner, Observer { height ->
             Log.i("video", "app bar height ${height}")
-            (localVideContainer.layoutParams as ViewGroup.MarginLayoutParams).apply {
+            (binding.videoContainerSmall.layoutParams as ViewGroup.MarginLayoutParams).apply {
                 updateMargins(top = (viewModel.actionBarHeight.value ?: 0) + resources.getDimensionPixelSize(R.dimen.spacing_tiny))
             }
         })
@@ -242,9 +310,11 @@ class VideoCallFragment : BaseFragment() {
 
         viewModel.videoState.observe(viewLifecycleOwner, Observer { disabled ->
             if (disabled) {
+                removeLocalContainer()
                 rtcEngine?.enableLocalVideo(false)
 //                localVideContainer.makeVisible()
             } else {
+                showLocalContainer()
                 rtcEngine?.enableLocalVideo(true)
 //                localVideContainer.makeGone()
             }
@@ -287,10 +357,11 @@ class VideoCallFragment : BaseFragment() {
                     showLocalPointer()
                 }
                 ANNOTATION_ARROW -> {
-                    Log.i("Video", "Clearing local pointer and arrow")
+                    Log.i("Video", "Clearing local pointer")
                     clearLocalPointer()
                 }
                 else -> {
+                    Log.i("Video", "Clearing local pointer and arrow")
                     clearLocalPointer()
                     clearLocalArrow()
                 }
@@ -301,9 +372,19 @@ class VideoCallFragment : BaseFragment() {
             TransitionManager.beginDelayedTransition(binding.parent, Slide(Gravity.START))
             when (videoMode) {
                 VIDEO_NORMAL -> {
+                    if (settingsViewModel.isUserTechnician.value ?: false) {
+                        showLocalContainer()
+                    } else {
+                        showRemoteContainer()
+                    }
                     rtcEngine?.enableVideo()
                 }
                 else -> {
+                    if (settingsViewModel.isUserTechnician.value ?: false) {
+                        removeLocalContainer()
+                    } else {
+                        removeRemoteContainer()
+                    }
                     rtcEngine?.disableVideo()
                 }
             }
@@ -314,7 +395,11 @@ class VideoCallFragment : BaseFragment() {
     private fun subscribeAnnotation() {
         viewModel.remotePointerLocation.observe(viewLifecycleOwner, Observer { position ->
             with (position) {
-                moveRemotePointer(x, y)
+                if (viewModel.currentVideoCallMode.value == VIDEO_NORMAL) {
+                    moveRemotePointer(x, y, true)
+                } else {
+                    moveRemotePointer(x, y, false)
+                }
             }
         })
         
@@ -329,24 +414,53 @@ class VideoCallFragment : BaseFragment() {
         })
     }
 
-    private fun moveLocalPointer(x: Float, y: Float) {
-        binding.localPointer.makeVisible()
-        with (binding.localPointer) {
-            this.x = x - width / 2
-            this.y = y - height / 2
-            Log.i("Video", "Local pointer moved to ${binding.localPointer.x} ${binding.localPointer.y} visibility ${binding.localPointer.visibility}")
+    private fun moveLocalPointer(x: Float, y: Float, autoHide: Boolean) {
+        if (x != 0f && y != 0f) {
+            Log.i("Video", "move local pointer $x $y}")
+            TransitionManager.endTransitions(binding.parent)
+            with(binding.localPointer) {
+                this.x = x - width / 2
+                this.y = y - height / 2
+                makeVisible()
+                if (autoHide) {
+                    TransitionManager.beginDelayedTransition(
+                        binding.parent,
+                        Fade().apply {
+                            duration = 1000
+                        }
+                    )
+                    makeGone()
+                }
+            }
         }
     }
 
-    private fun moveRemotePointer(x: Float, y: Float) {
-        /**
-         * Coordinates need to be scaled to account for the unique screen resolution.
-         */
-        with (displayMetrics()) {
-            with (binding.remotePointer) {
-                this.x = x * widthPixels - width / 2
-                this.y = y * heightPixels - height / 2
-                makeVisible()
+    private fun moveRemotePointer(x: Float, y: Float, autoHide: Boolean) {
+        if (x != 0f && y != 0f) {
+            Log.i("Video", "move remote pointer $x $y}")
+            TransitionManager.endTransitions(binding.parent)
+            /**
+             * Coordinates need to be scaled to account for the unique screen resolution.
+             */
+            with(displayMetrics()) {
+                with(binding.remotePointer) {
+                    makeVisible()
+                    this.x = x * widthPixels - width / 2
+                    this.y = y * heightPixels - height / 2
+                    Log.i(
+                        "Video",
+                        "Moving remote pointer to ${x * widthPixels - width / 2} ${y * heightPixels - height / 2}"
+                    )
+                    if (autoHide) {
+                        TransitionManager.beginDelayedTransition(
+                            binding.parent,
+                            Fade().apply {
+                                duration = 1000
+                            }
+                        )
+                        makeGone()
+                    }
+                }
             }
         }
     }
@@ -411,7 +525,8 @@ class VideoCallFragment : BaseFragment() {
     }
 
     private fun clearRemoteAnnotation() {
-        binding.remotePointer.makeGone()
+        Log.i("Video", "Clear remote annotation called6")
+        binding.remotePointer.makeInvisible()
         binding.remoteArrow1.makeGone()
         binding.remoteArrow2.makeGone()
         binding.remoteArrow3.makeGone()
