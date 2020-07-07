@@ -15,7 +15,7 @@ data class Message(
     constructor(type: Type, body: String) : this(type, body, null)
     // Pointer Message
     constructor(type: Type, position: Position) : this(type, null, position)
-    // Clear Message
+    // Clear Message, Pause Message, Resume Message
     constructor(type: Type) : this(type, null, null)
 
     /**
@@ -25,6 +25,8 @@ data class Message(
         TEXT,
         POINTER,
         ARROW,
-        CLEAR
+        CLEAR,
+        PAUSE,
+        RESUME
     }
 }

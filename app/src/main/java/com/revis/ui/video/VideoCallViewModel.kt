@@ -36,6 +36,12 @@ class VideoCallViewModel @Inject constructor(
     val localPointerLocation = MutableLiveData(Position(0f, 0f))
     val remotePointerLocation = MutableLiveData(Position(0f, 0f))
 
+    val localArrowLocation = MutableLiveData(Position(0f, 0f))
+    val remoteArrowLocation = MutableLiveData(Position(0f, 0f))
+
+    val remoteAnnotationClear = MutableLiveData(true)
+    val localAnnotationClear = MutableLiveData(true)
+
     val messageList = MutableLiveData(arrayListOf<MessageChip>())
 
     val videoQualitySetting = MutableLiveData(VIDEO_QUALITY_HIGH)
@@ -54,6 +60,18 @@ class VideoCallViewModel @Inject constructor(
 
     fun createArrowMessage(step: String, position: Position): String {
         return gson.toJson(Message(Message.Type.ARROW, step, position))
+    }
+
+    fun createClearMessage(): String {
+        return gson.toJson(Message(Message.Type.CLEAR))
+    }
+
+    fun createPauseMessage(): String {
+        return gson.toJson(Message(Message.Type.PAUSE))
+    }
+
+    fun createResumeMessage(): String {
+        return gson.toJson(Message(Message.Type.RESUME))
     }
 
     fun getMessageFromRtm(rtmMessage: RtmMessage): Message {
@@ -104,6 +122,23 @@ class VideoCallViewModel @Inject constructor(
     }
 
     fun sendLocalPointerLocation(x: Float, y: Float) {
+        Log.i("Video", "Sending local pointer loaction $x $y")
         localPointerLocation.value = Position(x, y)
+    }
+
+    fun setRemoteArrowLocation(position: Position) {
+        remoteArrowLocation.value = position
+    }
+
+    fun sendLocalArrowLocation(x: Float, y: Float) {
+        localArrowLocation.value = Position(x, y)
+    }
+
+    fun sendLocalAnnotationClear() {
+        localAnnotationClear.flipBoolean()
+    }
+
+    fun clearRemoteAnnotation() {
+        remoteAnnotationClear.flipBoolean()
     }
 }

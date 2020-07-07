@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
@@ -15,18 +15,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:keepScreenOn="true"
-        >
+        android:keepScreenOn="true">
 
         <FrameLayout
             android:id="@+id/video_container_big"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/holo_blue_bright"
-            />
+            android:background="@android:color/holo_blue_bright" />
 
         <ImageView
-            android:id="@+id/localPointer"
+            android:id="@+id/local_pointer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -38,17 +36,55 @@
             />
 
         <ImageView
-            android:id="@+id/remotePointer"
+            android:id="@+id/remote_pointer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:src="@drawable/ic_pointer_large"
             android:tint="@color/green"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-        />
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/local_arrow_1"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/arrow_1_local"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/local_arrow_2"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/arrow_2_local"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/local_arrow_3"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/arrow_3_local"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/remote_arrow_1"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/arrow_1_remote"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/remote_arrow_2"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/arrow_2_remote"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/remote_arrow_3"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/arrow_3_remote"
+            android:visibility="gone" />
 
         <FrameLayout
             android:id="@+id/video_container_small"
@@ -56,78 +92,85 @@
             android:layout_height="240dp"
             android:background="@android:color/holo_orange_dark"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/button_fab_placeholder"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:visibility="invisible"
             android:layout_marginBottom="24dp"
             android:elevation="2dp"
+            android:visibility="invisible"
             app:icon="@drawable/ic_pause"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageButton
-            android:id="@+id/button_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/button_fab_placeholder"
-            app:layout_constraintEnd_toStartOf="@+id/button_undo"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button_fab_placeholder"
-            app:srcCompat="@drawable/ic_clear"
-            style="@style/CircleButtonActive"
-            />
-
-        <ImageButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_undo"
+            style="@style/UnelevatedSolidButtonStyle.Whitecircular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_smaller"
+            android:onClick="@{() -> viewModel.setAnnotationState(AnnotationState.ANNOTATION_CLEAR)}"
+            android:text="@string/clear"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/button_close"
+            style="@style/UnelevatedExtendedFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/back"
+            android:textSize="@dimen/font_medium"
+            app:icon="@drawable/ic_up"
             app:layout_constraintBottom_toBottomOf="@+id/button_fab_placeholder"
             app:layout_constraintEnd_toStartOf="@id/button_fab_placeholder"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/button_close"
-            app:layout_constraintTop_toTopOf="@+id/button_fab_placeholder"
-            android:onClick="@{() -> viewModel.setAnnotationState(AnnotationState.ANNOTATION_CLEAR)}"
-            app:srcCompat="@drawable/ic_undo"
-            style="@style/CircleButtonActive"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/button_fab_placeholder" />
 
-        <ImageButton
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_pointer"
+            style="@style/UnelevatedExtendedFab"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/button_fab_placeholder"
-            app:layout_constraintEnd_toStartOf="@+id/button_arrow"
-            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_height="48dp"
+            android:text="@string/pointer"
+            app:icon="@drawable/ic_pointer"
+            android:onClick="@{() -> viewModel.setAnnotationState(AnnotationState.ANNOTATION_ARROW)}"
+            app:layout_constraintBottom_toBottomOf="@id/button_fab_placeholder"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/button_fab_placeholder"
-            app:layout_constraintTop_toTopOf="@+id/button_fab_placeholder"
-            app:isSelected="@{viewModel.currentAnnotationState == AnnotationState.ANNOTATION_POINTER}"
-            android:onClick="@{() -> viewModel.setAnnotationState(AnnotationState.ANNOTATION_POINTER)}"
-            app:srcCompat="@drawable/ic_pointer"
-            style="@style/CircleButton"
-            />
+            app:layout_constraintTop_toTopOf="@+id/button_fab_placeholder" />
 
-        <ImageButton
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_arrow"
+            style="@style/UnelevatedExtendedFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/arrows"
+            app:icon="@drawable/ic_down"
+            android:onClick="@{() -> viewModel.setAnnotationState(AnnotationState.ANNOTATION_POINTER)}"
             app:layout_constraintBottom_toBottomOf="@+id/button_fab_placeholder"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/button_pointer"
-            app:layout_constraintTop_toTopOf="@+id/button_fab_placeholder"
-            app:isSelected="@{viewModel.currentAnnotationState == AnnotationState.ANNOTATION_ARROW}"
-            android:onClick="@{() -> viewModel.setAnnotationState(AnnotationState.ANNOTATION_ARROW)}"
-            app:srcCompat="@drawable/ic_down"
-            style="@style/CircleButton"
-            />
+            app:layout_constraintStart_toEndOf="@+id/button_fab_placeholder"
+            app:layout_constraintTop_toTopOf="@+id/button_fab_placeholder" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="676dp"
+            android:orientation="horizontal" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="678dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

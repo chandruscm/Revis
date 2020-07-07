@@ -12,6 +12,8 @@ import com.revis.ui.message.Message.Type.TEXT
 import com.revis.ui.message.Message.Type.POINTER
 import com.revis.ui.message.Message.Type.ARROW
 import com.revis.ui.message.Message.Type.CLEAR
+import com.revis.ui.message.Message.Type.PAUSE
+import com.revis.ui.message.Message.Type.RESUME
 import com.revis.ui.message.Position
 
 /**
@@ -27,6 +29,10 @@ open class BaseRtmChannelListener : RtmChannelListener {
 
     open fun onClearMessageReceived() { }
 
+    open fun onPauseMessageReceived() { }
+
+    open fun onResumeMessageReceived() { }
+
     override fun onAttributesUpdated(list: MutableList<RtmChannelAttribute>) { }
 
     override fun onFileMessageReceived(fileMessage: RtmFileMessage, member: RtmChannelMember) { }
@@ -41,6 +47,8 @@ open class BaseRtmChannelListener : RtmChannelListener {
                 POINTER -> onPointerMessageReceived(message.position!!)
                 ARROW -> onArrowMessageReceived(message.body!!, message.position!!)
                 CLEAR -> onClearMessageReceived()
+                PAUSE -> onPauseMessageReceived()
+                RESUME -> onResumeMessageReceived()
             }
         }
     }

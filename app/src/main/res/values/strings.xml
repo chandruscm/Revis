@@ -39,6 +39,9 @@
     <string name="settings_audio_speaker">Use phone speaker</string>
     <string name="tab_video_settings">Video</string>
     <string name="tab_audio_settings">Audio</string>
+    <string name="clear">Clear</string>
+    <string name="pointer">Pointer</string>
+    <string name="arrows">Arrows</string>
 
     <!-- Deep link Dialog -->
     <string name="join_call_via_link_prompt">Would you like to join this servicing call using the revis app?</string>

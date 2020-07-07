@@ -3,6 +3,7 @@ package com.revis.utils
 import android.content.Context
 import android.util.DisplayMetrics
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -96,4 +97,13 @@ fun Fragment.displayMetrics(): DisplayMetrics {
  */
 fun <T> MutableLiveData<T>.notifyObserver() {
     this.value = this.value
+}
+
+/**
+ * Position at bottom center of an ImageView
+ */
+fun ImageView.bottomXY(x: Float, y: Float, size: Float) {
+    this.x = x - size / 2
+    this.y = y - size
+    visibility = View.VISIBLE
 }

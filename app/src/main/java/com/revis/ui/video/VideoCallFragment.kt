@@ -2,11 +2,13 @@ package com.revis.ui.video
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.revis.R
@@ -17,6 +19,7 @@ import com.revis.ui.shared.BaseFragment
 import com.revis.ui.video.VideoCallState.VIDEO_NORMAL
 import com.revis.ui.video.AnnotationState.ANNOTATION_POINTER
 import com.revis.ui.video.AnnotationState.ANNOTATION_ARROW
+import com.revis.ui.video.VideoCallState.VIDEO_PAUSED
 import com.revis.utils.*
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
@@ -66,6 +69,11 @@ class VideoCallFragment : BaseFragment() {
 
     private var rtcEngine: RtcEngine? = null
 
+    private var nextLocalArrowIndex = 0
+    private var nextRemoteArrowIndex = 0
+
+    private var arrowSizePixels = 0f
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -79,6 +87,8 @@ class VideoCallFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arrowSizePixels = resources.getDimension(R.dimen.arrow_size)
 
         initAgora()
         setupLocalVideo()
@@ -168,20 +178,34 @@ class VideoCallFragment : BaseFragment() {
             val x = motionEvent.x
             val y = motionEvent.y
             with (viewModel) {
-                if (currentVideoCallState.value != VIDEO_NORMAL &&
-                    currentAnnotationState.value == ANNOTATION_POINTER
-                ) {
+                if (currentVideoCallState.value != VIDEO_NORMAL) {
                     when (motionEvent.action) {
-                        MotionEvent.ACTION_MOVE -> moveLocalPointer(x, y)
+                        MotionEvent.ACTION_MOVE -> {
+                            if (currentAnnotationState.value == ANNOTATION_POINTER) {
+                                moveLocalPointer(x, y)
+                            }
+                        }
                         MotionEvent.ACTION_UP -> {
-                            /**
-                             * Coordinates need to be scaled to account for the unique screen resolution.
-                             */
                             with(displayMetrics()) {
-                                viewModel.sendLocalPointerLocation(
-                                    x / widthPixels,
-                                    y / heightPixels
-                                )
+                                Log.i("Video", "First action up")
+                                if (currentAnnotationState.value == ANNOTATION_POINTER) {
+                                    /**
+                                     * Coordinates need to be scaled to account for the unique screen resolution.
+                                     */
+                                    with(displayMetrics()) {
+                                        viewModel.sendLocalPointerLocation(
+                                            x / widthPixels,
+                                            y / heightPixels
+                                        )
+                                    }
+                                } else if (currentAnnotationState.value == ANNOTATION_ARROW) {
+                                    Log.i("Video", "x:$x y:$y")
+                                    addNewLocalArrow(x, y)
+                                    viewModel.sendLocalArrowLocation(
+                                        x / widthPixels,
+                                        y / heightPixels
+                                    )
+                                }
                             }
                         }
                     }
@@ -194,6 +218,18 @@ class VideoCallFragment : BaseFragment() {
     private fun initListeners() {
         binding.buttonClose.setOnClickListener {
             viewModel.currentVideoCallState.value = VIDEO_NORMAL
+        }
+
+        binding.buttonPointer.setOnClickListener {
+            viewModel.currentAnnotationState.value = ANNOTATION_ARROW
+            binding.buttonPointer.makeGone()
+            binding.buttonArrow.makeVisible()
+        }
+
+        binding.buttonArrow.setOnClickListener {
+            viewModel.currentAnnotationState.value = ANNOTATION_POINTER
+            binding.buttonArrow.makeGone()
+            binding.buttonPointer.makeVisible()
         }
     }
 
@@ -240,16 +276,33 @@ class VideoCallFragment : BaseFragment() {
             rtcEngine?.setEnableSpeakerphone(enabled)
         })
 
+        viewModel.currentVideoCallState.observe(viewLifecycleOwner, Observer { videoCallState ->
+            when (videoCallState) {
+                VIDEO_PAUSED -> {
+
+                }
+            }
+        })
+
         viewModel.currentAnnotationState.observe(viewLifecycleOwner, Observer { annotationState ->
+            viewModel.sendLocalAnnotationClear()
             when (annotationState) {
                 ANNOTATION_POINTER -> {
-                    binding.localPointer.makeVisible()
+                    Log.i("Video", "Making local pointer visible")
+                    binding.buttonPointer.makeVisible()
+                    binding.buttonArrow.makeGone()
+                    clearLocalArrow()
+                    showLocalPointer()
                 }
                 ANNOTATION_ARROW -> {
-                    binding.localPointer.makeGone()
+                    Log.i("Video", "Clearing local pointer and arrow")
+                    binding.buttonArrow.makeVisible()
+                    binding.buttonPointer.makeGone()
+                    clearLocalPointer()
                 }
                 else -> {
-                    binding.localPointer.makeGone()
+                    clearLocalPointer()
+                    clearLocalArrow()
                 }
             }
         })
@@ -258,17 +311,28 @@ class VideoCallFragment : BaseFragment() {
     private fun subscribeAnnotation() {
         viewModel.remotePointerLocation.observe(viewLifecycleOwner, Observer { position ->
             with (position) {
-                if (x != 0f && y != 0f) {
-                    moveRemotePointer(x, y)
-                }
+                moveRemotePointer(x, y)
             }
+        })
+        
+        viewModel.remoteArrowLocation.observe(viewLifecycleOwner, Observer { position ->
+            with (position) {
+                addNewRemoteArrow(x, y)
+            }
+        })
+
+        viewModel.remoteAnnotationClear.observe(viewLifecycleOwner, Observer {
+            clearRemoteAnnotation()
         })
     }
 
     private fun moveLocalPointer(x: Float, y: Float) {
-        binding.localPointer.x = x
-        binding.localPointer.y = y
         binding.localPointer.makeVisible()
+        with (binding.localPointer) {
+            this.x = x - width / 2
+            this.y = y - height / 2
+            Log.i("Video", "Local pointer moved to ${binding.localPointer.x} ${binding.localPointer.y} visibility ${binding.localPointer.visibility}")
+        }
     }
 
     private fun moveRemotePointer(x: Float, y: Float) {
@@ -276,14 +340,94 @@ class VideoCallFragment : BaseFragment() {
          * Coordinates need to be scaled to account for the unique screen resolution.
          */
         with (displayMetrics()) {
-            binding.remotePointer.x = x * widthPixels
-            binding.remotePointer.y = y * heightPixels
-            binding.remotePointer.makeVisible()
+            with (binding.remotePointer) {
+                this.x = x * widthPixels - width / 2
+                this.y = y * heightPixels - height / 2
+                makeVisible()
+            }
+        }
+    }
+    
+    private fun addNewLocalArrow(x: Float, y: Float) {
+        if (nextLocalArrowIndex > 2) {
+            return
+        }
+        when (nextLocalArrowIndex) {
+            0 -> {
+                binding.localArrow1.bottomXY(x, y, arrowSizePixels)
+                Log.i("video", "Arrow 1 aaded at x:${binding.localArrow1.x} y:${binding.localArrow1.y}")
+                nextLocalArrowIndex ++
+            }
+            1 -> {
+                binding.localArrow2.bottomXY(x, y, arrowSizePixels)
+                Log.i("video", "Arrow 2 aaded at x:${binding.localArrow2.x} y:${binding.localArrow2.y}")
+                nextLocalArrowIndex ++
+            }
+            else -> {
+                binding.localArrow3.bottomXY(x, y, arrowSizePixels)
+                Log.i("video", "Arrow 3 aaded at x:${binding.localArrow3.x} y:${binding.localArrow3.y}")
+                nextLocalArrowIndex ++
+            }
+        }
+    }
+
+    private fun addNewRemoteArrow(x: Float, y: Float) {
+        with (displayMetrics()) {
+            val trueX = x * widthPixels
+            val trueY = y * heightPixels
+            if (nextRemoteArrowIndex > 2) {
+                return
+            }
+            when (nextRemoteArrowIndex) {
+                0 -> {
+                    binding.remoteArrow1.bottomXY(trueX, trueY, arrowSizePixels)
+                    Log.i(
+                        "video",
+                        "Arrow 1 aaded at x:${binding.remoteArrow1.x} y:${binding.remoteArrow1.y}"
+                    )
+                    nextRemoteArrowIndex++
+                }
+                1 -> {
+                    binding.remoteArrow2.bottomXY(trueX, trueY, arrowSizePixels)
+                    Log.i(
+                        "video",
+                        "Arrow 2 aaded at x:${binding.remoteArrow2.x} y:${binding.remoteArrow2.y}"
+                    )
+                    nextRemoteArrowIndex++
+                }
+                else -> {
+                    binding.remoteArrow3.bottomXY(trueX, trueY, arrowSizePixels)
+                    Log.i(
+                        "video",
+                        "Arrow 3 aaded at x:${binding.remoteArrow3.x} y:${binding.remoteArrow3.y}"
+                    )
+                    nextRemoteArrowIndex++
+                }
+            }
         }
     }
 
     private fun clearRemoteAnnotation() {
+        binding.remotePointer.makeGone()
+        binding.remoteArrow1.makeGone()
+        binding.remoteArrow2.makeGone()
+        binding.remoteArrow3.makeGone()
+        nextRemoteArrowIndex = 0
+    }
 
+    private fun showLocalPointer() {
+        binding.localPointer.makeVisible()
+    }
+
+    private fun clearLocalPointer() {
+        binding.localPointer.makeGone()
+    }
+
+    private fun clearLocalArrow() {
+        binding.localArrow1.makeGone()
+        binding.localArrow2.makeGone()
+        binding.localArrow3.makeGone()
+        nextLocalArrowIndex = 0
     }
 
     override fun onDestroy() {

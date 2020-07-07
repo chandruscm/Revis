@@ -2,6 +2,7 @@ package com.revis.ui.video
 
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
@@ -70,7 +71,16 @@ class VideoCallActivity : BaseActivity() {
             }
         }
 
+        override fun onArrowMessageReceived(step: String, position: Position) {
+            runOnUiThread {
+                viewModel.setRemoteArrowLocation(position)
+            }
+        }
+
         override fun onClearMessageReceived() {
+            runOnUiThread {
+                viewModel.clearRemoteAnnotation()
+            }
         }
     }
 
@@ -107,7 +117,6 @@ class VideoCallActivity : BaseActivity() {
 
             override fun onSuccess(responseInfo: Void?) {
                 runOnUiThread {
-                    startCallTimer()
                     joinChannel()
                 }
             }
@@ -163,11 +172,18 @@ class VideoCallActivity : BaseActivity() {
                         VIDEO_NORMAL -> {
                             value = VIDEO_ANNOTATION
                             if (currentAnnotationState.value == ANNOTATION_CLEAR) {
-                                currentAnnotationState.value = ANNOTATION_POINTER
+                                currentAnnotationState.postValue(ANNOTATION_POINTER)
+                                Log.i("video", "Annotation set to ${currentAnnotationState.value.toString()}")
                             }
                         }
-                        VIDEO_ANNOTATION -> value = VIDEO_PAUSED
-                        VIDEO_PAUSED -> value = VIDEO_ANNOTATION
+                        VIDEO_ANNOTATION -> {
+                            value = VIDEO_PAUSED
+                            sendMessage(viewModel.createPauseMessage())
+                        }
+                        VIDEO_PAUSED -> {
+                            value = VIDEO_ANNOTATION
+                            sendMessage(viewModel.createResumeMessage())
+                        }
                     }
                 }
             }
@@ -177,6 +193,14 @@ class VideoCallActivity : BaseActivity() {
     private fun subscribeUi() {
         viewModel.localPointerLocation.observe(this, Observer { position ->
             sendMessage(viewModel.createPointerMessage(position))
+        })
+
+        viewModel.localArrowLocation.observe(this, Observer { position ->
+            sendMessage(viewModel.createArrowMessage("", position))
+        })
+
+        viewModel.localAnnotationClear.observe(this, Observer {
+            sendMessage(viewModel.createClearMessage())
         })
 
             //Todo: Debug
@@ -194,6 +218,7 @@ class VideoCallActivity : BaseActivity() {
         viewModel.remoteUserJoined.observe(this, Observer { userJoined ->
             if (userJoined) {
                 binding.parent.removeView(binding.waitingLayout.root)
+                startCallTimer()
             }
         })
     }

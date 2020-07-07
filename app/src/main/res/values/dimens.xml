@@ -19,4 +19,6 @@
 
     <dimen name="dialog_corner_radius">6dp</dimen>
 
+    <dimen name="arrow_size">80dp</dimen>
+
 </resources>
