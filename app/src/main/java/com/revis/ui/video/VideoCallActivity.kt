@@ -1,5 +1,7 @@
 package com.revis.ui.video
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
@@ -202,6 +204,19 @@ class VideoCallActivity : BaseActivity() {
                 }
             }
         }
+
+        binding.waitingLayout.buttonShareServiceCallId.setOnClickListener {
+            shareServiceCallId()
+        }
+    }
+
+    private fun shareServiceCallId() {
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "Join my revis servicing call : https://revis.com/?channel=${args.channel} 👷‍♂️")
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(shareIntent, "Share via"))
     }
 
     private fun subscribeUi() {
