@@ -20,6 +20,7 @@ import com.revis.ui.shared.BaseFragment
 import com.revis.ui.video.VideoCallMode.VIDEO_NORMAL
 import com.revis.ui.video.AnnotationState.ANNOTATION_POINTER
 import com.revis.ui.video.AnnotationState.ANNOTATION_ARROW
+import com.revis.ui.video.AnnotationState.ANNOTATION_CLEAR
 import com.revis.utils.*
 import io.agora.rtc.Constants.*
 import io.agora.rtc.IRtcEngineEventHandler
@@ -372,6 +373,7 @@ class VideoCallFragment : BaseFragment() {
             TransitionManager.beginDelayedTransition(binding.parent, Slide(Gravity.START))
             when (videoMode) {
                 VIDEO_NORMAL -> {
+                    viewModel.currentAnnotationState.value = ANNOTATION_CLEAR
                     if (settingsViewModel.isUserTechnician.value ?: false) {
                         showLocalContainer()
                     } else {
