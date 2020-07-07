@@ -15,4 +15,8 @@
         android:id="@+id/videoCallSettingsDialog"
         android:name="com.revis.ui.video.VideoCallSettingsDialog"
         android:label="VideoCallSettingsDialog" />
+    <dialog
+        android:id="@+id/endCallDialog"
+        android:name="com.revis.ui.video.EndCallDialog"
+        android:label="EndCallDialog"/>
 </navigation>

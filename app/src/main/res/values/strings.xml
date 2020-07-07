@@ -42,6 +42,9 @@
     <string name="clear">Clear</string>
     <string name="pointer">Pointer</string>
     <string name="arrows">Arrows</string>
+    <string name="end_call_confirmation">Are you sure you want to end this call?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <!-- Deep link Dialog -->
     <string name="join_call_via_link_prompt">Would you like to join this servicing call using the revis app?</string>

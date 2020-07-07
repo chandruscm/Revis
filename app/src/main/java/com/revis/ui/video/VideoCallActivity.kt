@@ -11,6 +11,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -181,7 +182,7 @@ class VideoCallActivity : BaseActivity() {
         }
 
         binding.buttonEndCall.setOnClickListener {
-            finish()
+            showEndCallDialog()
         }
 
         binding.buttonFab.setOnClickListener {
@@ -341,6 +342,11 @@ class VideoCallActivity : BaseActivity() {
         bottomSheetBehavior.collapse()
     }
 
+    private fun showEndCallDialog() {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.endCallDialog)
+    }
+
+
     override fun onBackPressed() {
         if (bottomSheetBehavior.isExpanded()) {
             bottomSheetBehavior.collapse()
@@ -351,6 +357,8 @@ class VideoCallActivity : BaseActivity() {
             sendMessage(viewModel.createResumeMessage())
         } else if (viewModel.remoteUserJoined.value == false) {
             finish()
+        } else {
+            showEndCallDialog()
         }
     }
 

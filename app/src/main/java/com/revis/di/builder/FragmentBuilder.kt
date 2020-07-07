@@ -7,10 +7,7 @@ import com.revis.ui.dialog.DeepLinkDialogPromptFragment
 import com.revis.ui.home.HomeFragment
 import com.revis.ui.home.JoinCallOperatorDialog
 import com.revis.ui.settings.SettingsFragment
-import com.revis.ui.video.AudioSettingsFragment
-import com.revis.ui.video.VideoCallFragment
-import com.revis.ui.video.VideoCallSettingsDialog
-import com.revis.ui.video.VideoSettingsFragment
+import com.revis.ui.video.*
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -28,6 +25,10 @@ abstract class FragmentBuilder {
     @FragmentScope
     @ContributesAndroidInjector
     internal abstract fun provideJoinCallOperatorDialog(): JoinCallOperatorDialog
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    internal abstract fun provideEndCallDialog(): EndCallDialog
 
     @FragmentScope
     @ContributesAndroidInjector
