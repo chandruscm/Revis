@@ -1,11 +1,16 @@
 package com.revis.ui.video
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.ScaleAnimation
+import android.view.inputmethod.InputMethodManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnPreDraw
@@ -157,6 +162,16 @@ class VideoCallActivity : BaseActivity() {
                     }
 
                     override fun onStateChanged(bottomSheet: View, newState: Int) {
+                        when (newState) {
+                            BottomSheetBehavior.STATE_EXPANDED -> {
+                                viewModel.messagesState.value = true
+                                binding.buttonFab.hide()
+                            }
+                            BottomSheetBehavior.STATE_COLLAPSED -> {
+                                viewModel.messagesState.value = false
+                                binding.buttonFab.show()
+                            }
+                        }
                     }
                 }
             )
@@ -254,7 +269,9 @@ class VideoCallActivity : BaseActivity() {
             if (enabled) {
                 bottomSheetBehavior.expand()
             } else {
+                hideKeyboard()
                 bottomSheetBehavior.collapse()
+
             }
         })
 
@@ -342,6 +359,11 @@ class VideoCallActivity : BaseActivity() {
         bottomSheetBehavior.collapse()
     }
 
+    private fun hideKeyboard() {
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        inputManager?.hideSoftInputFromWindow(binding.bottomSheet.messageInput.windowToken, 0)
+    }
+
     private fun showEndCallDialog() {
         findNavController(R.id.nav_host_fragment).navigate(R.id.endCallDialog)
     }
@@ -350,8 +372,6 @@ class VideoCallActivity : BaseActivity() {
     override fun onBackPressed() {
         if (bottomSheetBehavior.isExpanded()) {
             bottomSheetBehavior.collapse()
-            //Todo: Add bottomsheet callback
-            viewModel.messagesState.value = false
         } else if (viewModel.currentVideoCallMode.value == VIDEO_PAUSED) {
             viewModel.currentVideoCallMode.value = VIDEO_NORMAL
             sendMessage(viewModel.createResumeMessage())
