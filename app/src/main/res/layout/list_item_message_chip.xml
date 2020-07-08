@@ -41,7 +41,7 @@
                 android:paddingTop="@dimen/spacing_tiny"
                 android:paddingEnd="@dimen/spacing_small"
                 android:paddingBottom="@dimen/spacing_tiny"
-                android:textSize="@dimen/font_medium"
+                android:textSize="@dimen/font_large"
                 android:text="@{messageChip.text}"
                 tools:text="Hifadsfas dfadsfadsf asdfasdfa sfasdfadsf asdf asdf asdf asdf !"
                 />
@@ -72,7 +72,7 @@
                 android:paddingTop="@dimen/spacing_tiny"
                 android:paddingEnd="@dimen/spacing_small"
                 android:paddingBottom="@dimen/spacing_tiny"
-                android:textSize="@dimen/font_medium"
+                android:textSize="@dimen/font_large"
                 android:text="@{messageChip.text}"
                 tools:text="Hi!" />
 
