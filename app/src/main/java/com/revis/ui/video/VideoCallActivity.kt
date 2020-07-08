@@ -169,6 +169,7 @@ class VideoCallActivity : BaseActivity() {
                             }
                             BottomSheetBehavior.STATE_COLLAPSED -> {
                                 viewModel.messagesState.value = false
+                                binding.appBarLayout.setExpanded(true, true)
                                 binding.buttonFab.show()
                             }
                         }
