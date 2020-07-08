@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateMargins
 import androidx.lifecycle.Observer
@@ -236,7 +237,8 @@ class VideoCallFragment : BaseFragment() {
     }
 
     private fun onRemoteUserLeft() {
-//        remoteVideoContainer.removeAllViews()
+        Toast.makeText(requireContext(), "Call ended by user", Toast.LENGTH_SHORT).show()
+        requireActivity().finish()
     }
 
     @SuppressLint("ClickableViewAccessibility")
