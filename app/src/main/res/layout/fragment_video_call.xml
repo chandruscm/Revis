@@ -107,7 +107,7 @@
             android:id="@+id/button_fab_placeholder"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="36dp"
             android:elevation="2dp"
             android:visibility="invisible"
             app:icon="@drawable/ic_pause"
@@ -123,7 +123,7 @@
             android:insetBottom="0dp"
             android:onClick="@{() -> viewModel.setAnnotationState(AnnotationState.ANNOTATION_CLEAR)}"
             android:text="@string/clear"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorPrimaryDark"
             app:icon="@drawable/ic_delete"
             app:layout_constraintBottom_toBottomOf="@+id/button_fab_placeholder"
             app:layout_constraintEnd_toStartOf="@+id/button_fab_placeholder"
@@ -162,6 +162,14 @@
             app:layout_constraintStart_toEndOf="@+id/button_pointer"
             app:layout_constraintTop_toTopOf="@+id/button_pointer"
             style="@style/CircleButton"
+            />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_annotation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="button_arrow,button_pointer,button_undo"
             />
 
         <FrameLayout

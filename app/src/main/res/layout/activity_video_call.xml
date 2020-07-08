@@ -134,7 +134,6 @@
 
         <include
             android:id="@+id/waiting_layout"
-            android:visibility="gone"
             layout="@layout/layout_waiting_room"
             app:channel="@{channel}"
             />

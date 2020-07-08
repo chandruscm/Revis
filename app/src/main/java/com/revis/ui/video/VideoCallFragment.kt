@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.animation.BounceInterpolator
+import android.view.animation.OvershootInterpolator
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateMargins
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.transition.Fade
@@ -372,7 +375,6 @@ class VideoCallFragment : BaseFragment() {
         })
 
         viewModel.currentVideoCallMode.observe(viewLifecycleOwner, Observer { videoMode ->
-            TransitionManager.beginDelayedTransition(binding.parent, Slide(Gravity.START))
             when (videoMode) {
                 VIDEO_NORMAL -> {
                     viewModel.currentAnnotationState.value = ANNOTATION_CLEAR
@@ -382,6 +384,8 @@ class VideoCallFragment : BaseFragment() {
                         showRemoteContainer()
                     }
                     rtcEngine?.enableVideo()
+                    TransitionManager.beginDelayedTransition(binding.parent, Slide(Gravity.BOTTOM))
+                    binding.groupAnnotation.makeGone()
                 }
                 else -> {
                     if (settingsViewModel.isUserTechnician.value ?: false) {
@@ -390,6 +394,8 @@ class VideoCallFragment : BaseFragment() {
                         removeRemoteContainer()
                     }
                     rtcEngine?.disableVideo()
+                    TransitionManager.beginDelayedTransition(binding.parent, Slide(Gravity.BOTTOM))
+                    binding.groupAnnotation.makeVisible()
                 }
             }
             Log.i("Video", "Visibility set to ${binding.videoContainerSmall.visibility}")
