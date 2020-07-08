@@ -113,10 +113,10 @@
             android:id="@+id/button_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:translationY="-36dp"
             android:elevation="2dp"
             app:layout_anchor="@id/bottom_sheet"
-            app:layout_anchorGravity="center_horizontal"
+            app:layout_anchorGravity="top|center_horizontal"
             android:text="@string/pause_call"
             app:icon="@drawable/ic_pause"
             style="@style/ExtendedFloatingButton.Accent"
@@ -124,6 +124,7 @@
 
         <include
             android:id="@+id/waiting_layout"
+            android:visibility="gone"
             layout="@layout/layout_waiting_room"
             app:channel="@{channel}"
             />

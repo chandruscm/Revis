@@ -159,6 +159,13 @@ class VideoCallActivity : BaseActivity() {
 
                 object : BottomSheetBehavior.BottomSheetCallback() {
                     override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                        with (binding.buttonFab) {
+                            if (slideOffset > 0.5f) {
+                                if (isShown) hide()
+                            } else {
+                                if (!isShown) show()
+                            }
+                        }
                     }
 
                     override fun onStateChanged(bottomSheet: View, newState: Int) {
