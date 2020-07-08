@@ -16,8 +16,8 @@ android {
         applicationId "com.revis"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
 
         buildConfigField("String", "AGORA_APP_ID", apiProperties["AGORA_APP_ID"])
         buildConfigField("String", "AGORA_CERT", apiProperties["AGORA_CERT"])
