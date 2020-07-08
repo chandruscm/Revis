@@ -127,8 +127,8 @@
             android:elevation="2dp"
             app:layout_anchor="@id/bottom_sheet"
             app:layout_anchorGravity="top|center_horizontal"
-            android:text="@string/pause_call"
-            app:icon="@drawable/ic_pause"
+            android:text="@string/annotate"
+            app:icon="@drawable/ic_pointer"
             style="@style/ExtendedFloatingButton.Accent"
             />
 

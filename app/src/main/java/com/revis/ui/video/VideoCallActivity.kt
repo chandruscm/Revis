@@ -292,7 +292,7 @@ class VideoCallActivity : BaseActivity() {
                 when (state) {
                     VIDEO_NORMAL -> {
                         disableFullScreen()
-                        setIconResource(R.drawable.ic_pause)
+                        setIconResource(R.drawable.ic_pointer)
                         extend()
                     }
                     else -> {
