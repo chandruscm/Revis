@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.revis.ui.contacts.ContactsViewHolder.ContactItemHolder
 import com.revis.databinding.ListItemContactBinding
 
-class ContactsAdapter : ListAdapter<Contact, ContactsViewHolder>(ConctactsDiffCallback) {
+class ContactsAdapter(
+    private val showOnlineStatus: Boolean
+) : ListAdapter<Contact, ContactsViewHolder>(ConctactsDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -22,6 +24,7 @@ class ContactsAdapter : ListAdapter<Contact, ContactsViewHolder>(ConctactsDiffCa
         if (holder is ContactItemHolder) {
             holder.binding.apply {
                 contact = getItem(position)
+                showOnlineStatus = this@ContactsAdapter.showOnlineStatus
             }
         }
     }

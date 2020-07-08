@@ -30,6 +30,23 @@ fun getSampleContacts(resources: Resources) = listOf(
     )
 )
 
+fun getSampleInvitees(resources: Resources) = listOf(
+    Contact(
+        id = 1,
+        name = "Marc Schumacher",
+        company = "WR Kompressorenservice",
+        image = R.drawable.contact_1,
+        status = Contact.Status.ONLINE
+    ),
+    Contact(
+        id = 2,
+        name = "Anastasiya Pavlova",
+        company = "WR Kompressorenservice",
+        image = R.drawable.contact_2,
+        status = Contact.Status.AWAY
+    )
+)
+
 fun getSampleCallLogs(resources: Resources) = listOf(
     CallLog(
         id = 1,

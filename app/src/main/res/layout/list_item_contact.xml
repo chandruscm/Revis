@@ -8,6 +8,10 @@
         <variable
             name="contact"
             type="com.revis.ui.contacts.Contact" />
+
+        <variable
+            name="showOnlineStatus"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,6 +81,7 @@
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:goneUnless="@{showOnlineStatus}"
             android:drawablePadding="6dp"
             app:setStatus="@{contact.status}"
             app:layout_constraintBottom_toBottomOf="@+id/image"

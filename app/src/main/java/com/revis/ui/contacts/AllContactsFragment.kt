@@ -38,7 +38,7 @@ class AllContactsFragment : BaseFragment() {
     }
 
     private fun initContactsList() {
-        adapter = ContactsAdapter()
+        adapter = ContactsAdapter(showOnlineStatus = true)
         adapter.submitList(getSampleContacts(resources))
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())

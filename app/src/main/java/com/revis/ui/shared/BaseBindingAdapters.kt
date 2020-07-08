@@ -37,7 +37,7 @@ object BaseBindingAdapters {
 
     @BindingAdapter("goneUnless")
     @JvmStatic
-    fun goneUnless(view: ViewGroup, condition: Boolean) {
+    fun goneUnless(view: View, condition: Boolean) {
         view.visibility = if (condition) View.VISIBLE else View.GONE
     }
 }

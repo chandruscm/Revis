@@ -32,6 +32,10 @@ abstract class FragmentBuilder {
 
     @FragmentScope
     @ContributesAndroidInjector
+    internal abstract fun provideInviteContactsDialog(): InviteContactsDialog
+
+    @FragmentScope
+    @ContributesAndroidInjector
     internal abstract fun provideSettingsFragment(): SettingsFragment
 
     @FragmentScope

@@ -208,6 +208,10 @@ class VideoCallActivity : BaseActivity() {
             showEndCallDialog()
         }
 
+        binding.buttonInvite.setOnClickListener {
+            showInviteContactsDialog()
+        }
+
         binding.buttonFab.setOnClickListener {
             with (viewModel) {
                 currentVideoCallMode.apply {
@@ -376,6 +380,9 @@ class VideoCallActivity : BaseActivity() {
         findNavController(R.id.nav_host_fragment).navigate(R.id.endCallDialog)
     }
 
+    private fun showInviteContactsDialog() {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.inviteContactsDialog)
+    }
 
     override fun onBackPressed() {
         if (bottomSheetBehavior.isExpanded()) {

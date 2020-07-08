@@ -19,4 +19,8 @@
         android:id="@+id/endCallDialog"
         android:name="com.revis.ui.video.EndCallDialog"
         android:label="EndCallDialog"/>
+    <dialog
+        android:id="@+id/inviteContactsDialog"
+        android:name="com.revis.ui.video.InviteContactsDialog"
+        android:label="InviteContactsDialog"/>
 </navigation>
