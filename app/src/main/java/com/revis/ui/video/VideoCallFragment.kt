@@ -252,9 +252,16 @@ class VideoCallFragment : BaseFragment() {
             with (viewModel) {
                 when (motionEvent.action) {
                     MotionEvent.ACTION_MOVE -> {
-                        if ((currentAnnotationState.value == ANNOTATION_POINTER) ||
-                                (currentVideoCallMode.value == VIDEO_NORMAL)){
-                            moveLocalPointer(x, y, false)
+                        with (displayMetrics()) {
+                            if ((currentAnnotationState.value == ANNOTATION_POINTER) ||
+                                (currentVideoCallMode.value == VIDEO_NORMAL)
+                            ) {
+                                moveLocalPointer(x, y, false)
+                                viewModel.sendLocalPointerLocation(
+                                    x / widthPixels,
+                                    y / heightPixels
+                                )
+                            }
                         }
                     }
                     MotionEvent.ACTION_UP -> {
