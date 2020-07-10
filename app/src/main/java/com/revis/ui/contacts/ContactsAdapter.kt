@@ -10,7 +10,8 @@ import com.revis.ui.contacts.ContactsViewHolder.ContactItemHolder
 import com.revis.databinding.ListItemContactBinding
 
 class ContactsAdapter(
-    private val showOnlineStatus: Boolean
+    private val showOnlineStatus: Boolean,
+    private val actionsHandler: ContactsActionsHandler
 ) : ListAdapter<Contact, ContactsViewHolder>(ConctactsDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsViewHolder {
@@ -25,6 +26,9 @@ class ContactsAdapter(
             holder.binding.apply {
                 contact = getItem(position)
                 showOnlineStatus = this@ContactsAdapter.showOnlineStatus
+                contactItem.setOnClickListener {
+                    actionsHandler.call()
+                }
             }
         }
     }

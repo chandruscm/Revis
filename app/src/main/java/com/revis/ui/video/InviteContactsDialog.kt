@@ -9,11 +9,12 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.revis.R
 import com.revis.databinding.DialogInviteContactsBinding
+import com.revis.ui.contacts.ContactsActionsHandler
 import com.revis.ui.contacts.ContactsAdapter
 import com.revis.ui.shared.BaseDialogFragment
 import com.revis.utils.getSampleInvitees
 
-class InviteContactsDialog : BaseDialogFragment() {
+class InviteContactsDialog : BaseDialogFragment(), ContactsActionsHandler {
 
     private lateinit var binding: DialogInviteContactsBinding
     private lateinit var adapter: ContactsAdapter
@@ -38,9 +39,11 @@ class InviteContactsDialog : BaseDialogFragment() {
     }
 
     private fun initInviteeList() {
-        adapter = ContactsAdapter(showOnlineStatus = false)
+        adapter = ContactsAdapter(showOnlineStatus = false, actionsHandler = this)
         adapter.submitList(getSampleInvitees(resources))
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
+
+    override fun call() { }
 }

@@ -3,6 +3,8 @@ package com.revis.di.builder
 import com.revis.di.scope.FragmentScope
 import com.revis.ui.contacts.AllContactsFragment
 import com.revis.ui.contacts.CallLogsFragment
+import com.revis.ui.contacts.IncomingCallFragment
+import com.revis.ui.contacts.RecordCallConfirmationDialog
 import com.revis.ui.dialog.DeepLinkDialogPromptFragment
 import com.revis.ui.home.HomeFragment
 import com.revis.ui.home.JoinCallOperatorDialog
@@ -25,6 +27,14 @@ abstract class FragmentBuilder {
     @FragmentScope
     @ContributesAndroidInjector
     internal abstract fun provideJoinCallOperatorDialog(): JoinCallOperatorDialog
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    internal abstract fun provideRecordCalLConfirmationDialog(): RecordCallConfirmationDialog
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    internal abstract fun provideIncomingCallFragment(): IncomingCallFragment
 
     @FragmentScope
     @ContributesAndroidInjector

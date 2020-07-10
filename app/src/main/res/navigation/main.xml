@@ -34,6 +34,12 @@
         <action
             android:id="@+id/action_homeFragment_to_joinCallOperatorDialog"
             app:destination="@id/joinCallOperatorDialog" />
+        <action
+            android:id="@+id/action_homeFragment_to_recordCallConfirmationDialog"
+            app:destination="@id/recordCallConfirmationDialog" />
+        <action
+            android:id="@+id/action_homeFragment_to_incomingCallFragment"
+            app:destination="@id/incomingCallFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -51,4 +57,21 @@
             android:id="@+id/action_joinCallOperatorDialog_to_videoCallActivity"
             app:destination="@id/videoCallActivity" />
     </dialog>
+    <dialog
+        android:id="@+id/recordCallConfirmationDialog"
+        android:name="com.revis.ui.contacts.RecordCallConfirmationDialog"
+        android:label="RecordCallConfirmationDialog"
+        >
+        <action
+            android:id="@+id/action_recordCallConfirmationDialog_to_videoCallActivity"
+            app:destination="@id/videoCallActivity" />
+    </dialog>
+    <fragment
+        android:id="@+id/incomingCallFragment"
+        android:name="com.revis.ui.contacts.IncomingCallFragment"
+        android:label="IncomingCallFragment" >
+        <action
+            android:id="@+id/action_incomingCallFragment_to_videoCallActivity"
+            app:destination="@id/videoCallActivity" />
+    </fragment>
 </navigation>

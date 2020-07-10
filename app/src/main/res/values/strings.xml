@@ -16,6 +16,8 @@
     <string name="settings">Settings</string>
     <string name="debug_settings">Debug Settings</string>
     <string name="service_call_id">Service call ID</string>
+    <string name="record_call">Record call</string>
+    <string name="record_call_description">Would you like to record this video call?</string>
 
     <!-- Settings Fragment -->
     <string name="choose_role">Choose role</string>

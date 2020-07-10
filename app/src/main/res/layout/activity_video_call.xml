@@ -10,6 +10,10 @@
             type="com.revis.ui.video.VideoCallViewModel" />
 
         <variable
+            name="isTechnician"
+            type="Boolean" />
+
+        <variable
             name="channel"
             type="String" />
     </data>
@@ -134,8 +138,8 @@
 
         <include
             android:id="@+id/waiting_layout"
-            layout="@layout/layout_waiting_room"
-            app:channel="@{channel}"
+            layout="@layout/fragment_video_call_outgoing"
+            app:isTechnician="@{isTechnician}"
             />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

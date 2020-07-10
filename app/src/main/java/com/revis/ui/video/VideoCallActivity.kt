@@ -28,6 +28,7 @@ import com.revis.databinding.ActivityVideoCallBinding
 import com.revis.ui.message.MessageChip
 import com.revis.ui.message.MessageChipAdapter
 import com.revis.ui.message.Position
+import com.revis.ui.settings.SettingsViewModel
 import com.revis.ui.shared.BaseActivity
 import com.revis.ui.video.AnnotationState.*
 import com.revis.ui.video.VideoCallMode.*
@@ -52,6 +53,9 @@ class VideoCallActivity : BaseActivity() {
 
     @Inject
     lateinit var viewModel: VideoCallViewModel
+
+    @Inject
+    lateinit var settingsViewModel: SettingsViewModel
 
     @Inject
     lateinit var rtmClientFactory: BaseRtmClient.Factory
@@ -115,6 +119,7 @@ class VideoCallActivity : BaseActivity() {
             this, R.layout.activity_video_call
         )
         binding.viewModel = viewModel
+        binding.isTechnician = settingsViewModel.isUserTechnician.value ?: false
         binding.channel = args.channel
         binding.lifecycleOwner = this
         // Setting chronometer font via xml does not work for some reason!
@@ -233,9 +238,9 @@ class VideoCallActivity : BaseActivity() {
             }
         }
 
-        binding.waitingLayout.buttonShareServiceCallId.setOnClickListener {
-            shareServiceCallId()
-        }
+//        binding.waitingLayout.buttonShareServiceCallId.setOnClickListener {
+//            shareServiceCallId()
+//        }
     }
 
     private fun shareServiceCallId() {
