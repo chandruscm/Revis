@@ -9,6 +9,9 @@ import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 
+/**
+ * Databinding adapters used through out the app.
+ */
 object BaseBindingAdapters {
 
     @BindingAdapter("isSelected")

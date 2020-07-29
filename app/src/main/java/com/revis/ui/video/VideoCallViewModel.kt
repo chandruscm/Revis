@@ -17,6 +17,9 @@ import io.agora.rtm.RtmChannelMember
 import io.agora.rtm.RtmMessage
 import javax.inject.Inject
 
+/**
+ * Viewmodel for the video call screen.
+ */
 class VideoCallViewModel @Inject constructor(
     private val gson: Gson
 ) : ViewModel() {
@@ -84,7 +87,6 @@ class VideoCallViewModel @Inject constructor(
     }
 
     fun addNewMessage(message: String, member: RtmChannelMember? = null, isSelf: Boolean) {
-        Log.i("VideoCall", "Adding message $message")
         messageList.value?.add(
             MessageChip(
                 System.currentTimeMillis().toInt(),
@@ -95,7 +97,6 @@ class VideoCallViewModel @Inject constructor(
         )
         messageList.notifyObserver()
         messageList.value?.forEach { item ->
-            Log.i("VideoCall", "List element : $item")
         }
     }
 
@@ -114,7 +115,6 @@ class VideoCallViewModel @Inject constructor(
     }
 
     fun setAnnotationState(state: AnnotationState) {
-        Log.i("Video", "Annotation set to ${state.name}")
         currentAnnotationState.value = state
     }
 
@@ -127,7 +127,6 @@ class VideoCallViewModel @Inject constructor(
     }
 
     fun sendLocalPointerLocation(x: Float, y: Float) {
-        Log.i("Video", "Sending local pointer loaction $x $y")
         localPointerLocation.value = Position(x, y)
     }
 

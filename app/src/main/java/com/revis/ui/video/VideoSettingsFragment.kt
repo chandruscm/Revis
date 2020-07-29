@@ -8,6 +8,9 @@ import com.revis.databinding.FragmentVideoSettingsBinding
 import com.revis.ui.shared.BaseFragment
 import javax.inject.Inject
 
+/**
+ * Tab Fragment on the video call settings dialog with video preferences.
+ */
 class VideoSettingsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentVideoSettingsBinding

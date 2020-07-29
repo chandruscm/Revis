@@ -9,6 +9,9 @@ import com.revis.databinding.FragmentCallLogsBinding
 import com.revis.ui.shared.BaseFragment
 import com.revis.utils.getSampleCallLogs
 
+/**
+ * Tab Fragment on the Homescreen with the list of call logs.
+ */
 class CallLogsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentCallLogsBinding

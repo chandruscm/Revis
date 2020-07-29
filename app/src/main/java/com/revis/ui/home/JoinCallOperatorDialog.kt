@@ -14,6 +14,9 @@ import com.revis.R
 import com.revis.databinding.DialogJoinCallOperatorBinding
 import com.revis.ui.shared.BaseDialogFragment
 
+/**
+ * Dialog prompt to enter the service call id.
+ */
 class JoinCallOperatorDialog : BaseDialogFragment() {
 
     private lateinit var binding: DialogJoinCallOperatorBinding
@@ -60,7 +63,6 @@ class JoinCallOperatorDialog : BaseDialogFragment() {
 
     private fun showKeyboard() {
         if (binding.inputCallId.requestFocus()) {
-            Log.i("JoinCall", "Has Focus")
             dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         }
     }

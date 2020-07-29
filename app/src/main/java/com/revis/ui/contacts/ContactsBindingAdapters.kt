@@ -15,6 +15,9 @@ import com.revis.ui.contacts.CallLog.State.INCOMING
 import com.revis.ui.contacts.CallLog.State.OUTGOING
 import com.revis.ui.contacts.CallLog.State.MISSED
 
+/**
+ * Databinding adapters for Contacts.
+ */
 object ContactsBindingAdapters {
 
     @BindingAdapter("setStatus")

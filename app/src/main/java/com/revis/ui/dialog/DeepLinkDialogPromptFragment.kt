@@ -9,6 +9,9 @@ import androidx.navigation.fragment.navArgs
 import com.revis.databinding.FragmentDeepLinkDialogPromptBinding
 import com.revis.ui.shared.BaseFragment
 
+/**
+ * Fragment for the deep link dialog.
+ */
 class DeepLinkDialogPromptFragment : BaseFragment() {
 
     private lateinit var binding: FragmentDeepLinkDialogPromptBinding

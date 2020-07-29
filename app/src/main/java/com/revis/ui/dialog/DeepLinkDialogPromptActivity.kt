@@ -7,6 +7,9 @@ import androidx.navigation.Navigation
 import com.revis.R
 import com.revis.ui.shared.BaseActivity
 
+/**
+ * Activity container for the deep link dialog.
+ */
 class DeepLinkDialogPromptActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

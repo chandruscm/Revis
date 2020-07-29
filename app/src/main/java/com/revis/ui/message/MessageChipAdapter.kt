@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.revis.databinding.ListItemMessageChipBinding
 import com.revis.ui.message.MessageChipViewHolder.MessageChipItemHolder
 
+/**
+ * Adapter class of the Messages RecyclerView.
+ */
 class MessageChipAdapter : ListAdapter<MessageChip, MessageChipViewHolder>(MessageChipDiffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageChipViewHolder {
@@ -22,7 +25,6 @@ class MessageChipAdapter : ListAdapter<MessageChip, MessageChipViewHolder>(Messa
     override fun onBindViewHolder(holder: MessageChipViewHolder, position: Int) {
         if (holder is MessageChipItemHolder) {
             holder.binding.apply {
-                Log.i("MessageChipAdapter", "New message view binded")
                 messageChip = getItem(position)
             }
         }

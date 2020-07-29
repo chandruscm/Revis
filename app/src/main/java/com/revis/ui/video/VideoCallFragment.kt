@@ -36,6 +36,9 @@ import io.agora.rtc.video.VideoEncoderConfiguration
 import javax.inject.Inject
 import javax.inject.Named
 
+/**
+ * Fragment for the Agora Video Call. Handles annotation updates.
+ */
 class VideoCallFragment : BaseFragment() {
 
     private lateinit var binding: FragmentVideoCallBinding
@@ -79,7 +82,6 @@ class VideoCallFragment : BaseFragment() {
         override fun onRemoteVideoStateChanged(uid: Int, state: Int, reason: Int, elapsed: Int) {
             requireActivity().runOnUiThread {
                 if (viewModel.currentVideoCallMode.value ?: false == VIDEO_NORMAL) {
-                    Log.i("Video", "State : $state Reason $reason")
                     if (state == REMOTE_VIDEO_STATE_STOPPED &&
                         reason == REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED
                     ) {
@@ -244,6 +246,9 @@ class VideoCallFragment : BaseFragment() {
         requireActivity().finish()
     }
 
+    /**
+     * Todo: Throttle the annotation updates with RxJava Debounce.
+     */
     @SuppressLint("ClickableViewAccessibility")
     private fun setupAnnotation() {
         binding.videoContainerBig.setOnTouchListener { view, motionEvent ->
@@ -266,9 +271,7 @@ class VideoCallFragment : BaseFragment() {
                     }
                     MotionEvent.ACTION_UP -> {
                         with(displayMetrics()) {
-                            Log.i("Video", "First action up")
                             if (currentVideoCallMode.value == VIDEO_NORMAL) {
-                                Log.i("Video", "send local pointer location $x $y")
                                 moveLocalPointer(x, y, true)
                                 viewModel.sendLocalPointerLocation(
                                     x / widthPixels,
@@ -284,7 +287,6 @@ class VideoCallFragment : BaseFragment() {
                                     y / heightPixels
                                 )
                             } else if (currentAnnotationState.value == ANNOTATION_ARROW) {
-                                Log.i("Video", "x:$x y:$y")
                                 addNewLocalArrow(x, y)
                                 viewModel.sendLocalArrowLocation(
                                     x / widthPixels,
@@ -311,7 +313,6 @@ class VideoCallFragment : BaseFragment() {
 
     private fun subscribeUi() {
         viewModel.actionBarHeight.observe(viewLifecycleOwner, Observer { height ->
-            Log.i("video", "app bar height ${height}")
             (binding.videoContainerSmall.layoutParams as ViewGroup.MarginLayoutParams).apply {
                 updateMargins(top = (viewModel.actionBarHeight.value ?: 0) + resources.getDimensionPixelSize(R.dimen.spacing_tiny))
             }
@@ -365,16 +366,13 @@ class VideoCallFragment : BaseFragment() {
             viewModel.sendLocalAnnotationClear()
             when (annotationState) {
                 ANNOTATION_POINTER -> {
-                    Log.i("Video", "Making local pointer visible")
                     clearLocalArrow()
                     showLocalPointer()
                 }
                 ANNOTATION_ARROW -> {
-                    Log.i("Video", "Clearing local pointer")
                     clearLocalPointer()
                 }
                 else -> {
-                    Log.i("Video", "Clearing local pointer and arrow")
                     clearLocalPointer()
                     clearLocalArrow()
                 }
@@ -405,7 +403,6 @@ class VideoCallFragment : BaseFragment() {
                     binding.groupAnnotation.makeVisible()
                 }
             }
-            Log.i("Video", "Visibility set to ${binding.videoContainerSmall.visibility}")
         })
     }
 
@@ -431,9 +428,11 @@ class VideoCallFragment : BaseFragment() {
         })
     }
 
+    /**
+     * Todo: Use a customview for annotations.
+     */
     private fun moveLocalPointer(x: Float, y: Float, autoHide: Boolean) {
         if (x != 0f && y != 0f) {
-            Log.i("Video", "move local pointer $x $y}")
             TransitionManager.endTransitions(binding.parent)
             with(binding.localPointer) {
                 this.x = x - width / 2
@@ -452,9 +451,11 @@ class VideoCallFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Todo: Use a customview for annotations.
+     */
     private fun moveRemotePointer(x: Float, y: Float, autoHide: Boolean) {
         if (x != 0f && y != 0f) {
-            Log.i("Video", "move remote pointer $x $y}")
             TransitionManager.endTransitions(binding.parent)
             /**
              * Coordinates need to be scaled to account for the unique screen resolution.
@@ -464,10 +465,6 @@ class VideoCallFragment : BaseFragment() {
                     makeVisible()
                     this.x = x * widthPixels - width / 2
                     this.y = y * heightPixels - height / 2
-                    Log.i(
-                        "Video",
-                        "Moving remote pointer to ${x * widthPixels - width / 2} ${y * heightPixels - height / 2}"
-                    )
                     if (autoHide) {
                         TransitionManager.beginDelayedTransition(
                             binding.parent,
@@ -481,7 +478,10 @@ class VideoCallFragment : BaseFragment() {
             }
         }
     }
-    
+
+    /**
+     * Todo: Use a customview for annotations.
+     */
     private fun addNewLocalArrow(x: Float, y: Float) {
         if (nextLocalArrowIndex > 2) {
             return
@@ -489,22 +489,22 @@ class VideoCallFragment : BaseFragment() {
         when (nextLocalArrowIndex) {
             0 -> {
                 binding.localArrow1.bottomXY(x, y, arrowSizePixels)
-                Log.i("video", "Arrow 1 aaded at x:${binding.localArrow1.x} y:${binding.localArrow1.y}")
                 nextLocalArrowIndex ++
             }
             1 -> {
                 binding.localArrow2.bottomXY(x, y, arrowSizePixels)
-                Log.i("video", "Arrow 2 aaded at x:${binding.localArrow2.x} y:${binding.localArrow2.y}")
                 nextLocalArrowIndex ++
             }
             else -> {
                 binding.localArrow3.bottomXY(x, y, arrowSizePixels)
-                Log.i("video", "Arrow 3 aaded at x:${binding.localArrow3.x} y:${binding.localArrow3.y}")
                 nextLocalArrowIndex ++
             }
         }
     }
 
+    /**
+     * Todo: Use a customview for annotations.
+     */
     private fun addNewRemoteArrow(x: Float, y: Float) {
         with (displayMetrics()) {
             val trueX = x * widthPixels
@@ -515,34 +515,24 @@ class VideoCallFragment : BaseFragment() {
             when (nextRemoteArrowIndex) {
                 0 -> {
                     binding.remoteArrow1.bottomXY(trueX, trueY, arrowSizePixels)
-                    Log.i(
-                        "video",
-                        "Arrow 1 aaded at x:${binding.remoteArrow1.x} y:${binding.remoteArrow1.y}"
-                    )
                     nextRemoteArrowIndex++
                 }
                 1 -> {
                     binding.remoteArrow2.bottomXY(trueX, trueY, arrowSizePixels)
-                    Log.i(
-                        "video",
-                        "Arrow 2 aaded at x:${binding.remoteArrow2.x} y:${binding.remoteArrow2.y}"
-                    )
                     nextRemoteArrowIndex++
                 }
                 else -> {
                     binding.remoteArrow3.bottomXY(trueX, trueY, arrowSizePixels)
-                    Log.i(
-                        "video",
-                        "Arrow 3 aaded at x:${binding.remoteArrow3.x} y:${binding.remoteArrow3.y}"
-                    )
                     nextRemoteArrowIndex++
                 }
             }
         }
     }
 
+    /**
+     * Todo: Use a customview for annotations.
+     */
     private fun clearRemoteAnnotation() {
-        Log.i("Video", "Clear remote annotation called6")
         binding.remotePointer.makeInvisible()
         binding.remoteArrow1.makeGone()
         binding.remoteArrow2.makeGone()
@@ -550,14 +540,23 @@ class VideoCallFragment : BaseFragment() {
         nextRemoteArrowIndex = 0
     }
 
+    /**
+     * Todo: Use a customview for annotations.
+     */
     private fun showLocalPointer() {
         binding.localPointer.makeVisible()
     }
 
+    /**
+     * Todo: Use a customview for annotations.
+     */
     private fun clearLocalPointer() {
         binding.localPointer.makeGone()
     }
 
+    /**
+     * Todo: Use a customview for annotations.
+     */
     private fun clearLocalArrow() {
         binding.localArrow1.makeGone()
         binding.localArrow2.makeGone()

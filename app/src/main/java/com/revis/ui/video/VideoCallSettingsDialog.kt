@@ -13,6 +13,9 @@ import com.revis.databinding.DialogVideoCallSettingsBinding
 import com.revis.ui.shared.BaseDialogFragment
 import javax.inject.Inject
 
+/**
+ * Settings Dialog in the video call screen.
+ */
 class VideoCallSettingsDialog : BaseDialogFragment() {
 
     private lateinit var binding: DialogVideoCallSettingsBinding

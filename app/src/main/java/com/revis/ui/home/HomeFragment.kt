@@ -14,6 +14,9 @@ import com.revis.ui.shared.BaseFragment
 import javax.inject.Inject
 import kotlin.random.Random
 
+/**
+ * Fragment to hold the homescreen.
+ */
 class HomeFragment : BaseFragment() {
 
     private lateinit var binding: FragmentHomeBinding

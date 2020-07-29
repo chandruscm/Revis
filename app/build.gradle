@@ -20,7 +20,6 @@ android {
         versionName "1.0.1"
 
         buildConfigField("String", "AGORA_APP_ID", apiProperties["AGORA_APP_ID"])
-        buildConfigField("String", "AGORA_CERT", apiProperties["AGORA_CERT"])
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

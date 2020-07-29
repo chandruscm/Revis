@@ -6,6 +6,9 @@ import io.agora.rtm.RtmMediaOperationProgress
 import io.agora.rtm.RtmMessage
 import io.agora.rtm.RtmFileMessage
 
+/**
+ * Open class to avoid overriding all methods.
+ */
 open class BaseRtmClientListener : RtmClientListener {
 
     override fun onMediaDownloadingProgress(mediaOperationProgress: RtmMediaOperationProgress, l: Long) { }

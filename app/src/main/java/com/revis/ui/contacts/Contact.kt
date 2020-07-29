@@ -1,5 +1,8 @@
 package com.revis.ui.contacts
 
+/**
+ * Model for a Contact.
+ */
 data class Contact(
     val id: Int,
     val name: String,

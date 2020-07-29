@@ -9,6 +9,9 @@ import com.revis.R
 import com.revis.databinding.DialogEndCallBinding
 import com.revis.ui.shared.BaseDialogFragment
 
+/**
+ * Dialog to confirm end call.
+ */
 class EndCallDialog : BaseDialogFragment() {
 
     private lateinit var binding: DialogEndCallBinding

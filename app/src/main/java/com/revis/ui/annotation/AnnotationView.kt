@@ -8,6 +8,9 @@ import android.util.AttributeSet
 import android.view.View
 import com.revis.R
 
+/**
+ * Custom view to handle annotations.
+ */
 class AnnotationView : View {
 
     private val pointerBitmap: Bitmap

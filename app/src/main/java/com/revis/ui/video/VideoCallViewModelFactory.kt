@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import javax.inject.Inject
 
+/**
+ * Factory class to create a VideoCallViewModel.
+ */
 class VideoCallViewModelFactory @Inject constructor(
     private val gson: Gson
 ): ViewModelProvider.Factory {

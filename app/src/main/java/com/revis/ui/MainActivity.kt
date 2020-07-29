@@ -9,6 +9,9 @@ import androidx.navigation.Navigation.findNavController
 import com.revis.R
 import com.revis.ui.shared.BaseActivity
 
+/**
+ * MainActivity used for the primary entry point of the app - homescreen.
+ */
 class MainActivity : BaseActivity() {
 
     private val PERMISSIONS_REQUEST_CODE = 99

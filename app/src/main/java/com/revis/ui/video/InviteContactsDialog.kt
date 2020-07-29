@@ -13,6 +13,9 @@ import com.revis.ui.contacts.ContactsAdapter
 import com.revis.ui.shared.BaseDialogFragment
 import com.revis.utils.getSampleInvitees
 
+/**
+ * Dialog to invite contacts into the video call.
+ */
 class InviteContactsDialog : BaseDialogFragment() {
 
     private lateinit var binding: DialogInviteContactsBinding

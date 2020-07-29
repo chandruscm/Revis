@@ -15,6 +15,9 @@ import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import dagger.android.support.AndroidSupportInjectionModule
 
+/**
+ * Define the Dagger App Component and declare the DI modules.
+ */
 @ApplicationScope
 @Component(
     modules = [

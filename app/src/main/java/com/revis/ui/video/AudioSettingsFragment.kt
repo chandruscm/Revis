@@ -8,6 +8,9 @@ import com.revis.databinding.FragmentAudioSettingsBinding
 import com.revis.ui.shared.BaseFragment
 import javax.inject.Inject
 
+/**
+ * Tab Fragment on the video call settings dialog with audio preferences.
+ */
 class AudioSettingsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAudioSettingsBinding

@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import javax.inject.Inject
 
+/**
+ * Factory class to create a SettingsViewModel.
+ */
 class SettingsViewModelFactory @Inject constructor(
     private val preferences: SharedPreferences
 ): ViewModelProvider.Factory {

@@ -6,6 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import javax.inject.Inject
 
+/**
+ * ViewModel to fetch app-level settings from preferences.
+ */
 class SettingsViewModel @Inject constructor(
     private val preferences: SharedPreferences
 ) : ViewModel() {

@@ -9,6 +9,9 @@ import com.revis.databinding.FragmentAllContactsBinding
 import com.revis.ui.shared.BaseFragment
 import com.revis.utils.getSampleContacts
 
+/**
+ * Tab Fragment on the Homescreen with the list of contacts.
+ */
 class AllContactsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAllContactsBinding

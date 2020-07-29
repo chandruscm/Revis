@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.revis.ui.contacts.CallLogsViewHolder.CallLogItemHolder
 import com.revis.databinding.ListItemCallLogBinding
 
+/**
+ * Adapter class of the CallLogs RecyclerView.
+ */
 class CallLogsAdapter : ListAdapter<CallLog, CallLogsViewHolder>(CallLogsDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CallLogsViewHolder {

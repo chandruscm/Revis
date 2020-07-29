@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.revis.ui.contacts.ContactsViewHolder.ContactItemHolder
 import com.revis.databinding.ListItemContactBinding
 
+/**
+ * Adapter class of the Contacts RecyclerView.
+ */
 class ContactsAdapter(
     private val showOnlineStatus: Boolean
 ) : ListAdapter<Contact, ContactsViewHolder>(ConctactsDiffCallback) {

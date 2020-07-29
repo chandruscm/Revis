@@ -42,6 +42,9 @@ import io.agora.rtm.RtmStatusCode
 import java.util.UUID
 import javax.inject.Inject
 
+/**
+ * Activity container for the video call screen. Handles bottom sheet interactions.
+ */
 class VideoCallActivity : BaseActivity() {
 
     private lateinit var binding: ActivityVideoCallBinding
@@ -89,14 +92,12 @@ class VideoCallActivity : BaseActivity() {
 
         override fun onPauseMessageReceived() {
             runOnUiThread {
-                Log.i("Video", "Pause message received")
                 viewModel.pauseVideo()
             }
         }
 
         override fun onResumeMessageReceived() {
             runOnUiThread {
-                Log.i("Video", "Resume message received")
                 viewModel.resumeVideo()
             }
         }
@@ -221,7 +222,6 @@ class VideoCallActivity : BaseActivity() {
                             sendMessage(createPauseMessage())
                             if (currentAnnotationState.value == ANNOTATION_CLEAR) {
                                 currentAnnotationState.value = ANNOTATION_ARROW
-                                Log.i("video", "Annotation set to ${currentAnnotationState.value.toString()}")
                             }
                         }
                         VIDEO_PAUSED -> {

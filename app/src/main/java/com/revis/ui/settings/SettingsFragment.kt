@@ -8,6 +8,9 @@ import com.revis.databinding.FragmentSettingsBinding
 import com.revis.ui.shared.BaseFragment
 import javax.inject.Inject
 
+/**
+ * Debug Settings Fragment for the Homescreen.
+ */
 class SettingsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSettingsBinding
